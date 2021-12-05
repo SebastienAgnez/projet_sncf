@@ -67,13 +67,15 @@
         </div>
       </div>
     </div>
+    Gares Départ : {{ gareD }} <br />
+    Gares Arrivée : {{ gareA }} <br /><br />
+    {{ infos }}
     <footer class="text-center text-white fixed-bottom">
       <div class="container p-4"></div>
       <div class="text-center p-3" style="background-color: #333333">
         © 2021 Copyright : AGNEZ Sébastien - BACQUET Manon
       </div>
     </footer>
-    {{ infos }}
   </div>
 </template>
 
@@ -85,14 +87,32 @@ export default {
   data() {
     return {
       infos: null,
+      gareD: [],
+      gareA: [],
     };
   },
-  mounted() {
+  methods: {},
+  async mounted() {
     axios
       .get(
-        "https://data.sncf.com/api/records/1.0/search/?dataset=regularite-mensuelle-tgv-aqst&q=&sort=date&facet=date&facet=service&facet=gare_depart&facet=gare_arrivee"
+        "https://data.sncf.com/api/records/1.0/search/?dataset=regularite-mensuelle-tgv-aqst&q=&sort=date&facet=date&facet=gare_depart&facet=gare_arrivee"
       )
-      .then((response) => (this.infos = response));
+      .then((response) => (this.infos = response))
+      .catch((error) => console.log(error));
+
+    const response = await axios.get(
+      "https://data.sncf.com/api/records/1.0/search/?dataset=regularite-mensuelle-tgv-aqst&q=&sort=date&facet=date&&facet=gare_depart&facet=gare_arrivee"
+    );
+    response.data.records.forEach((element) => {
+      // let data = {};
+      // let item = Object.create(data);
+      var gare_depart = element.fields.gare_depart;
+      var gare_arrivee = element.fields.gare_depart;
+      this.gareD.push(gare_depart);
+      this.gareA.push(gare_arrivee);
+      console.log(gare_depart);
+      console.log(gare_arrivee);
+    });
   },
 };
 </script>
