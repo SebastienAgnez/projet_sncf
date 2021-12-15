@@ -25,15 +25,23 @@
                 <span class="input-group-text">Départ</span>
                 <input
                   type="text"
+                  list="gareDepart"
                   aria-label="First name"
                   class="form-control supp-border"
                 />
+                <datalist id="gareDepart">
+                  <option v-for="gare in gareD" v-bind:key="gare" v-text="gare"></option>
+                </datalist>
                 <span class="input-group-text border-droit">Arrivée</span>
                 <input
                   type="text"
+                  list="gareArrivee"
                   aria-label="Last name"
                   class="form-control"
                 />
+                <datalist id="gareArrivee">
+                  <option v-for="gare in gareA" v-bind:key="gare" v-text="gare"></option>
+                </datalist>
               </div>
               <button type="button" class="btn btn-success mt-4">
                 Valider
@@ -67,9 +75,6 @@
         </div>
       </div>
     </div>
-    Gares Départ : {{ gareD }} <br />
-    Gares Arrivée : {{ gareA }} <br /><br />
-    {{ infos }}
     <footer class="text-center text-white fixed-bottom">
       <div class="container p-4"></div>
       <div class="text-center p-3" style="background-color: #333333">
@@ -91,27 +96,26 @@ export default {
       gareA: [],
     };
   },
-  methods: {},
+  methods: {
+  },
   async mounted() {
     axios
       .get(
-        "https://data.sncf.com/api/records/1.0/search/?dataset=regularite-mensuelle-tgv-aqst&q=&sort=date&facet=date&facet=gare_depart&facet=gare_arrivee"
+        "https://data.sncf.com/api/records/1.0/search/?dataset=regularite-mensuelle-tgv-aqst&q=&rows=5500&sort=date&facet=date&facet=service&facet=gare_depart&facet=gare_arrivee"
       )
       .then((response) => (this.infos = response))
       .catch((error) => console.log(error));
 
     const response = await axios.get(
-      "https://data.sncf.com/api/records/1.0/search/?dataset=regularite-mensuelle-tgv-aqst&q=&sort=date&facet=date&&facet=gare_depart&facet=gare_arrivee"
+      "https://data.sncf.com/api/records/1.0/search/?dataset=regularite-mensuelle-tgv-aqst&q=&rows=5500&sort=date&facet=date&facet=service&facet=gare_depart&facet=gare_arrivee"
     );
     response.data.records.forEach((element) => {
       // let data = {};
       // let item = Object.create(data);
-      var gare_depart = element.fields.gare_depart;
-      var gare_arrivee = element.fields.gare_depart;
-      this.gareD.push(gare_depart);
-      this.gareA.push(gare_arrivee);
-      console.log(gare_depart);
-      console.log(gare_arrivee);
+      var gareDepart = element.fields.gare_depart;
+      var gareArrivee = element.fields.gare_arrivee;
+      this.gareD.push(gareDepart);
+      this.gareA.push(gareArrivee);
     });
   },
 };
