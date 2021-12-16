@@ -9,6 +9,11 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family: "Gabi";
+  src: url('fonts/gabriel_weiss_friends/GABRWFFR.TTF');
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
