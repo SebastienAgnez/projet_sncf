@@ -6,8 +6,8 @@
         <div class="card">
           <div class="card-body">
             Vous en avez marre des retards des trains ? Vous n'êtes pas
-            satisfait de ces retards ? Votre coeur balance entre deux trajets
-            ? Alors consultez notre site pour choisir votre meilleur trajet et
+            satisfait de ces retards ? Votre coeur balance entre deux trajets ?
+            Alors consultez notre site pour choisir votre meilleur trajet et
             savoir si oui ou non les clients en sont satisfait !
           </div>
         </div>
@@ -19,67 +19,58 @@
         <div class="card-body">
           <div class="input-group">
             <span class="input-group-text">Départ</span>
-            <input
-              type="text"
-              list="gareDepart"
-              aria-label="First name"
-              class="form-control supp-border"
-              title="Choisissez votre gare de départ"
-            />
             <select id="gareDepart" @change="correspondingLines($event)">
-              <option v-for="gare in withoutDoublonDeparts" v-bind:key="gare" v-text="gare"></option>
+              <option
+                v-for="gare in withoutDoublonDeparts"
+                v-bind:key="gare"
+                v-text="gare"
+              ></option>
             </select>
             <span class="input-group-text border-droit">Arrivée</span>
-            <input
-              type="text"
-              list="gareArrivee"
-              aria-label="Last name"
-              class="form-control"
-            />
             <select id="gareArrivee">
-              <option v-for="gare in withoutDoublonCorrespondence" v-bind:key="gare" v-text="gare"></option>
+              <option
+                v-for="gare in withoutDoublonCorrespondence"
+                v-bind:key="gare"
+                v-text="gare"
+              ></option>
             </select>
           </div>
-          <button type="button" class="btn btn-success mt-4">
-            Valider
-          </button>
+          <button type="button" class="btn btn-success mt-4">Valider</button>
         </div>
       </div>
     </div>
     <div class="container">
-        <div class="card">
-          <div class="card-header">Dates</div>
-          <div class="card-body">
-            <div class="input-group">
-              <span class="input-group-text">Mois</span>
-              <input
-                type="month"
-                aria-label="First name"
-                class="form-control supp-border"
-              />
-              <span class="input-group-text border-droit">Années</span>
-              <input
-                type="number"
-                min="2000"
-                max=""
-                aria-label="Last name"
-                class="form-control"
-              />
-            </div>
-            <button type="button" class="btn btn-success mt-4">
-              Valider
-            </button>
+      <div class="card">
+        <div class="card-header">Dates</div>
+        <div class="card-body">
+          <div class="input-group">
+            <span class="input-group-text">Mois</span>
+            <input
+              type="month"
+              aria-label="First name"
+              class="form-control supp-border"
+            />
+            <span class="input-group-text border-droit">Années</span>
+            <input
+              type="number"
+              min="2000"
+              max=""
+              aria-label="Last name"
+              class="form-control"
+            />
           </div>
+          <button type="button" class="btn btn-success mt-4">Valider</button>
         </div>
+      </div>
     </div>
-  <div class="row">
-    <div class="col-md-6">
-      <li v-for="gare in gareD" :key="gare">Gare de départ : {{gare}}</li>
-    </div>
-    <div class="col-md-6">
-      <li v-for="gare in gareA" :key="gare">Gare d'arrivée : {{gare}}</li>
-    </div>
-  </div>
+    <!-- <div class="row">
+      <div class="col-md-6">
+        <li v-for="gare in gareD" :key="gare">Gare de départ : {{ gare }}</li>
+      </div>
+      <div class="col-md-6">
+        <li v-for="gare in gareA" :key="gare">Gare d'arrivée : {{ gare }}</li>
+      </div>
+    </div> -->
     <footer class="text-center text-white fixed-bottom">
       <div class="container p-4"></div>
       <div class="text-center p-3" style="background-color: #333333">
@@ -106,26 +97,26 @@ export default {
 
   computed: {
     // Enlever les doublons des gares de départs avec underscore
-    withoutDoublonDeparts(){
+    withoutDoublonDeparts() {
       return _.uniq(this.gareD);
     },
 
-    withoutDoublonCorrespondence(){
+    withoutDoublonCorrespondence() {
       return _.uniq(this.arrivalCorrespondence);
-    }
+    },
   },
 
   methods: {
-
     //Faire correspondre les gares de départs et d'arrivées
-    correspondingLines(event){
-      console.log("Notre input : ", event.target.value)
+    correspondingLines(event) {
+      console.log("Notre input : ", event.target.value);
+      this.arrivalCorrespondence = [];
       for (let index = 0; index < this.gareD.length; index++) {
         if (this.gareD[index] == event.target.value) {
-            this.arrivalCorrespondence.push(this.gareA[index]);
+          this.arrivalCorrespondence.push(this.gareA[index]);
         }
       }
-    }
+    },
   },
   async mounted() {
     axios
@@ -152,9 +143,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  h1{
-   font-family: 'Gabi'; 
-  }
+h1 {
+  font-family: "Gabi";
+}
 
 .input-group-text {
   border-top-right-radius: 0 !important;
@@ -171,8 +162,7 @@ export default {
   border-bottom-left-radius: 0 !important;
 }
 
-.container{
+.container {
   margin-bottom: 10px;
 }
-
 </style>
