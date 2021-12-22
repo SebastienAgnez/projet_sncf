@@ -26,7 +26,7 @@
               class="form-control supp-border"
               title="Choisissez votre gare de départ"
             />
-            <select id="gareDepart" v-on:change="correspondingLines($event)">
+            <select id="gareDepart" @change="correspondingLines($event)">
               <option v-for="gare in withoutDoublonDeparts" v-bind:key="gare" v-text="gare"></option>
             </select>
             <span class="input-group-text border-droit">Arrivée</span>
@@ -37,7 +37,7 @@
               class="form-control"
             />
             <select id="gareArrivee">
-              <option v-for="gare in arrivalCorrespondence" v-bind:key="gare" v-text="gare"></option>
+              <option v-for="gare in withoutDoublonCorrespondence" v-bind:key="gare" v-text="gare"></option>
             </select>
           </div>
           <button type="button" class="btn btn-success mt-4">
@@ -73,10 +73,10 @@
         </div>
     </div>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <li v-for="gare in gareD" :key="gare">Gare de départ : {{gare}}</li>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
       <li v-for="gare in gareA" :key="gare">Gare d'arrivée : {{gare}}</li>
     </div>
   </div>
@@ -109,27 +109,22 @@ export default {
     withoutDoublonDeparts(){
       return _.uniq(this.gareD);
     },
+
+    withoutDoublonCorrespondence(){
+      return _.uniq(this.arrivalCorrespondence);
+    }
   },
 
   methods: {
+
     //Faire correspondre les gares de départs et d'arrivées
     correspondingLines(event){
-      let listPos = [];
+      console.log("Notre input : ", event.target.value)
       for (let index = 0; index < this.gareD.length; index++) {
-        console.log(event.target.value);
         if (this.gareD[index] == event.target.value) {
-          listPos.push(index);
+            this.arrivalCorrespondence.push(this.gareA[index]);
         }
       }
-      for (let index = 0; index < listPos.length; index++) {
-        for (let pos = 0; pos < this.gareA.length; pos++) {
-          if (listPos[index] == pos) {
-            this.arrivalCorrespondence.push(this.gareA[pos]);
-            console.log(this.arrivalCorrespondence)
-          }   
-        } 
-      }
-      return _.uniq(this.arrivalCorrespondence);
     }
   },
   async mounted() {
