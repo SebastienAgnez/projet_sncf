@@ -2,78 +2,80 @@
   <div class="home">
     <h1>SATISF'RETARD</h1>
     <div class="container">
-      <div class="row">
-        <div class="col align-self-center">
-          <div class="card">
-            <div class="card-body">
-              Vous en avez marre des retards des trains ? Vous n'êtes pas
-              satisfait de ces retards ? Votre coeur balance entre deux trajets
-              ? Alors consultez notre site pour choisir votre meilleur trajet et
-              savoir si oui ou non les clients en sont satisfait !
-            </div>
+      <div class="col align-self-center">
+        <div class="card">
+          <div class="card-body">
+            Vous en avez marre des retards des trains ? Vous n'êtes pas
+            satisfait de ces retards ? Votre coeur balance entre deux trajets
+            ? Alors consultez notre site pour choisir votre meilleur trajet et
+            savoir si oui ou non les clients en sont satisfait !
           </div>
         </div>
       </div>
     </div>
     <div class="container">
-      <div class="row">
+      <div class="card">
+        <div class="card-header">Ligne directe</div>
+        <div class="card-body">
+          <div class="input-group">
+            <span class="input-group-text">Départ</span>
+            <input
+              type="text"
+              list="gareDepart"
+              aria-label="First name"
+              class="form-control supp-border"
+            />
+            <datalist id="gareDepart">
+              <option v-for="gare in gareD" v-bind:key="gare" v-text="gare"></option>
+            </datalist>
+            <span class="input-group-text border-droit">Arrivée</span>
+            <input
+              type="text"
+              list="gareArrivee"
+              aria-label="Last name"
+              class="form-control"
+            />
+            <datalist id="gareArrivee">
+              <option v-for="gare in gareA" v-bind:key="gare" v-text="gare"></option>
+            </datalist>
+          </div>
+          <button type="button" class="btn btn-success mt-4">
+            Valider
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="container">
         <div class="card">
-          <div class="card-header">Ligne directe</div>
+          <div class="card-header">Dates</div>
           <div class="card-body">
             <div class="input-group">
-              <span class="input-group-text">Départ</span>
+              <span class="input-group-text">Mois</span>
               <input
-                type="text"
-                list="gareDepart"
+                type="date"
                 aria-label="First name"
                 class="form-control supp-border"
               />
-              <datalist id="gareDepart">
-                <option v-for="gare in gareD" v-bind:key="gare" v-text="gare"></option>
-              </datalist>
-              <span class="input-group-text border-droit">Arrivée</span>
+              <span class="input-group-text border-droit">Années</span>
               <input
-                type="text"
-                list="gareArrivee"
+                type="date"
                 aria-label="Last name"
                 class="form-control"
               />
-              <datalist id="gareArrivee">
-                <option v-for="gare in gareA" v-bind:key="gare" v-text="gare"></option>
-              </datalist>
             </div>
             <button type="button" class="btn btn-success mt-4">
               Valider
             </button>
           </div>
         </div>
-      </div>
-      <div>
+    </div>
 
+    <div class="row">
+      <div class="col-md-6">
+        <li v-for="gares in withoutDoublon" :key="gares">{{gares}}</li>
       </div>
-      <div class="row">
-          <div class="card">
-            <div class="card-header">Dates</div>
-            <div class="card-body">
-              <div class="input-group">
-                <span class="input-group-text">Mois</span>
-                <input
-                  type="date"
-                  aria-label="First name"
-                  class="form-control supp-border"
-                />
-                <span class="input-group-text border-droit">Années</span>
-                <input
-                  type="date"
-                  aria-label="Last name"
-                  class="form-control"
-                />
-              </div>
-              <button type="button" class="btn btn-success mt-4">
-                Valider
-              </button>
-            </div>
-          </div>
+      <div class="col-md-6">
+        <li v-for="gare in gareD" :key="gare">{{gare}}</li>
       </div>
     </div>
     <footer class="text-center text-white fixed-bottom">
@@ -87,6 +89,7 @@
 
 <script>
 import axios from "axios";
+import * as _ from "underscore";
 
 export default {
   name: "Home",
@@ -97,6 +100,19 @@ export default {
       gareA: [],
     };
   },
+
+  computed: {
+    withoutDoublon(){
+      return _.uniq(this.gareD);
+    }
+  },
+
+      //       this.cells.splice(this.cells.indexOf(element) + 1, 1);
+      //     } else {
+      //       this.cells.splice(this.cells.indexOf(element) - 1, 1);
+      //     }
+      //   }
+      // });
   methods: {
   },
   async mounted() {
@@ -142,4 +158,9 @@ export default {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
+
+.container{
+  margin-bottom: 10px;
+}
+
 </style>
