@@ -1,76 +1,92 @@
 <template>
   <div class="home">
     <h1>SATISF'RETARD</h1>
-    <div class="container">
-      <div class="col align-self-center">
-        <div class="card">
-          <div class="card-body">
+    <v-container class="container">
+      <v-col>
+        <v-card class="mx-auto pa-4" max-width="900px">
+          <v-card-header-text>
             Vous en avez marre des retards des trains ? Vous n'êtes pas
             satisfait de ces retards ? Votre coeur balance entre deux trajets ?
             Alors consultez notre site pour choisir votre meilleur trajet et
             savoir si oui ou non les clients en sont satisfait !
-          </div>
+          </v-card-header-text>
+        </v-card>
+      </v-col>
+    </v-container>
+    <v-container>
+      <!-- Card gares départ/arrivée -->
+      <v-card class="pa-3" variant="outlined">
+        <v-card-header>
+          <v-card-title>Ligne directe</v-card-title>
+        </v-card-header>
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="gareDepart">Départ</label>
+          <select
+            class="form-select"
+            id="gareDepart"
+            @change="correspondingLines($event)"
+          >
+            <option selected>Choisissez votre gare de départ</option>
+            <option
+              v-for="gare in withoutDoublonDeparts"
+              v-bind:key="gare"
+              v-text="gare"
+            ></option>
+          </select>
+          <label class="input-group-text" for="gareArrivee">Arrivée</label>
+          <select
+            class="form-select"
+            id="gareArrivee"
+            @change="correspondingLines($event)"
+          >
+            <option selected>Choisissez votre gare d'arrivée</option>
+            <option
+              v-for="gare in withoutDoublonCorrespondence"
+              v-bind:key="gare"
+              v-text="gare"
+            ></option>
+          </select>
         </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="card">
-        <div class="card-header">Ligne directe</div>
-        <div class="card-body">
-          <div class="input-group">
-            <span class="input-group-text">Départ</span>
-            <select id="gareDepart" @change="correspondingLines($event)">
-              <option
-                v-for="gare in withoutDoublonDeparts"
-                v-bind:key="gare"
-                v-text="gare"
-              ></option>
-            </select>
-            <span class="input-group-text border-droit">Arrivée</span>
-            <select id="gareArrivee">
-              <option
-                v-for="gare in withoutDoublonCorrespondence"
-                v-bind:key="gare"
-                v-text="gare"
-              ></option>
-            </select>
-          </div>
-          <button type="button" class="btn btn-success mt-4">Valider</button>
+        <v-card-actions>
+          <v-btn class="mt-4" variant="outlined" rounded text> Valider </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-container>
+    <v-container>
+      <!-- Card dates -->
+      <v-card class="pa-3" variant="outlined">
+        <v-card-header-text>
+          <v-card-title>Dates</v-card-title>
+        </v-card-header-text>
+        <div class="input-group">
+          <span class="input-group-text">Mois</span>
+          <input
+            type="month"
+            aria-label="First name"
+            class="form-control supp-border"
+          />
+          <span class="input-group-text border-droit">Années</span>
+          <input
+            type="number"
+            min="2000"
+            max=""
+            aria-label="Last name"
+            class="form-control"
+          />
         </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="card">
-        <div class="card-header">Dates</div>
-        <div class="card-body">
-          <div class="input-group">
-            <span class="input-group-text">Mois</span>
-            <input
-              type="month"
-              aria-label="First name"
-              class="form-control supp-border"
-            />
-            <span class="input-group-text border-droit">Années</span>
-            <input
-              type="number"
-              min="2000"
-              max=""
-              aria-label="Last name"
-              class="form-control"
-            />
-          </div>
-          <button type="button" class="btn btn-success mt-4">Valider</button>
-        </div>
-      </div>
-    </div>
-    <!-- <div class="row">
+        <v-card-actions>
+          <v-btn class="mt-4" variant="outlined" rounded text> Valider </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-container>
+    <div class="row">
       <div class="col-md-6">
         <li v-for="gare in gareD" :key="gare">Gare de départ : {{ gare }}</li>
       </div>
       <div class="col-md-6">
         <li v-for="gare in gareA" :key="gare">Gare d'arrivée : {{ gare }}</li>
       </div>
-    </div> -->
+    </div>
     <footer class="text-center text-white fixed-bottom">
       <div class="container p-4"></div>
       <div class="text-center p-3" style="background-color: #333333">
@@ -162,7 +178,7 @@ h1 {
   border-bottom-left-radius: 0 !important;
 }
 
-.container {
+.v-container {
   margin-bottom: 10px;
 }
 </style>
