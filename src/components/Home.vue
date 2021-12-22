@@ -24,10 +24,11 @@
               list="gareDepart"
               aria-label="First name"
               class="form-control supp-border"
+              title="Choisissez votre gare de départ"
             />
-            <datalist id="gareDepart">
+            <select id="gareDepart" v-on:change="correspondingLines($event)">
               <option v-for="gare in withoutDoublonDeparts" v-bind:key="gare" v-text="gare"></option>
-            </datalist>
+            </select>
             <span class="input-group-text border-droit">Arrivée</span>
             <input
               type="text"
@@ -35,9 +36,9 @@
               aria-label="Last name"
               class="form-control"
             />
-            <datalist id="gareArrivee">
-              <option v-for="gare in withoutDoublonArrivees" v-bind:key="gare" v-text="gare"></option>
-            </datalist>
+            <select id="gareArrivee">
+              <option v-for="gare in arrivalCorrespondence" v-bind:key="gare" v-text="gare"></option>
+            </select>
           </div>
           <button type="button" class="btn btn-success mt-4">
             Valider
@@ -52,13 +53,15 @@
             <div class="input-group">
               <span class="input-group-text">Mois</span>
               <input
-                type="date"
+                type="month"
                 aria-label="First name"
                 class="form-control supp-border"
               />
               <span class="input-group-text border-droit">Années</span>
               <input
-                type="date"
+                type="number"
+                min="2000"
+                max=""
                 aria-label="Last name"
                 class="form-control"
               />
@@ -70,10 +73,10 @@
         </div>
     </div>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <li v-for="gare in gareD" :key="gare">Gare de départ : {{gare}}</li>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
       <li v-for="gare in gareA" :key="gare">Gare d'arrivée : {{gare}}</li>
     </div>
   </div>
@@ -95,6 +98,7 @@ export default {
   data() {
     return {
       infos: null,
+      arrivalCorrespondence: [],
       gareD: [],
       gareA: [],
     };
@@ -105,14 +109,28 @@ export default {
     withoutDoublonDeparts(){
       return _.uniq(this.gareD);
     },
-
-    // Enlever les doublons des gares d'arrivées avec underscore
-    withoutDoublonArrivees(){
-      return _.uniq(this.gareA);
-    },
   },
 
   methods: {
+    //Faire correspondre les gares de départs et d'arrivées
+    correspondingLines(event){
+      let listPos = [];
+      for (let index = 0; index < this.gareD.length; index++) {
+        console.log(event.target.value);
+        if (this.gareD[index] == event.target.value) {
+          listPos.push(index);
+        }
+      }
+      for (let index = 0; index < listPos.length; index++) {
+        for (let pos = 0; pos < this.gareA.length; pos++) {
+          if (listPos[index] == pos) {
+            this.arrivalCorrespondence.push(this.gareA[pos]);
+            console.log(this.arrivalCorrespondence)
+          }   
+        } 
+      }
+      return _.uniq(this.arrivalCorrespondence);
+    }
   },
   async mounted() {
     axios
