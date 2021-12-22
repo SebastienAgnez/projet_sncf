@@ -26,7 +26,7 @@
               class="form-control supp-border"
             />
             <datalist id="gareDepart">
-              <option v-for="gare in gareD" v-bind:key="gare" v-text="gare"></option>
+              <option v-for="gare in withoutDoublonDeparts" v-bind:key="gare" v-text="gare"></option>
             </datalist>
             <span class="input-group-text border-droit">Arrivée</span>
             <input
@@ -36,7 +36,7 @@
               class="form-control"
             />
             <datalist id="gareArrivee">
-              <option v-for="gare in gareA" v-bind:key="gare" v-text="gare"></option>
+              <option v-for="gare in withoutDoublonArrivees" v-bind:key="gare" v-text="gare"></option>
             </datalist>
           </div>
           <button type="button" class="btn btn-success mt-4">
@@ -69,15 +69,14 @@
           </div>
         </div>
     </div>
-
-    <div class="row">
-      <div class="col-md-6">
-        <li v-for="gares in withoutDoublon" :key="gares">{{gares}}</li>
-      </div>
-      <div class="col-md-6">
-        <li v-for="gare in gareD" :key="gare">{{gare}}</li>
-      </div>
+  <div class="row">
+    <div class="col-md-6">
+      <li v-for="gare in gareD" :key="gare">Gare de départ : {{gare}}</li>
     </div>
+    <div class="col-md-6">
+      <li v-for="gare in gareA" :key="gare">Gare d'arrivée : {{gare}}</li>
+    </div>
+  </div>
     <footer class="text-center text-white fixed-bottom">
       <div class="container p-4"></div>
       <div class="text-center p-3" style="background-color: #333333">
@@ -102,17 +101,17 @@ export default {
   },
 
   computed: {
-    withoutDoublon(){
+    // Enlever les doublons des gares de départs avec underscore
+    withoutDoublonDeparts(){
       return _.uniq(this.gareD);
-    }
+    },
+
+    // Enlever les doublons des gares d'arrivées avec underscore
+    withoutDoublonArrivees(){
+      return _.uniq(this.gareA);
+    },
   },
 
-      //       this.cells.splice(this.cells.indexOf(element) + 1, 1);
-      //     } else {
-      //       this.cells.splice(this.cells.indexOf(element) - 1, 1);
-      //     }
-      //   }
-      // });
   methods: {
   },
   async mounted() {
