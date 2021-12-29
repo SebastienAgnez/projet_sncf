@@ -52,7 +52,8 @@
         </v-card-actions>
       </v-card>
     </v-container>
-    <v-container>
+
+    <v-container class="dates">
       <!-- Card dates -->
       <v-card class="pa-3" variant="outlined">
         <v-card-header-text>
@@ -155,6 +156,7 @@ export default {
     });
   },
 };
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -180,5 +182,9 @@ h1 {
 
 .v-container {
   margin-bottom: 10px;
+}
+
+.dates{
+  visibility: hidden;
 }
 </style>
