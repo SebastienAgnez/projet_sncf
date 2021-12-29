@@ -13,7 +13,6 @@
         </v-card>
       </v-col>
     </v-container>
-    <v-container> BONJOUR</v-container>
     <v-container>
       <!-- Card gares départ/arrivée -->
       <v-card class="pa-3" variant="outlined">
