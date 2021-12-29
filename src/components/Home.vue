@@ -37,7 +37,6 @@
           <select
             class="form-select"
             id="gareArrivee"
-            @change="correspondingLines($event)"
           >
             <option selected>Choisissez votre gare d'arrivée</option>
             <option
@@ -100,13 +99,13 @@
 <script>
 import axios from "axios";
 import * as _ from "underscore";
-import { BarChart, useBarChart } from "vue-chart-3";
-import { computed, ref } from "vue";
+// import { BarChart, useBarChart } from "vue-chart-3";
+// import { computed, ref } from "vue";
 
 export default {
   name: "Home",
   components: {
-    BarChart,
+    // BarChart,
   },
   data() {
     return {
