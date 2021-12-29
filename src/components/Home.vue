@@ -79,6 +79,9 @@
         </v-card-actions>
       </v-card>
     </v-container>
+    <v-container>
+      <li v-for="date in dateGares" :key="date"> {{ date }}</li>
+    </v-container>
     <!-- <div class="row">
       <div class="col-md-6">
         <li v-for="gare in gareD" :key="gare">Gare de départ : {{ gare }}</li>
@@ -113,6 +116,7 @@ export default {
       arrivalCorrespondence: [],
       gareD: [],
       gareA: [],
+      dateGares: [],
     };
   },
   setup() {},
@@ -155,8 +159,10 @@ export default {
       // let item = Object.create(data);
       var gareDepart = element.fields.gare_depart;
       var gareArrivee = element.fields.gare_arrivee;
+      var dates = element.fields.date;
       this.gareD.push(gareDepart);
       this.gareA.push(gareArrivee);
+      this.dateGares.push(dates);
     });
   },
 };
