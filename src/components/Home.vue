@@ -52,7 +52,14 @@
         </v-card-actions>
       </v-card>
     </v-container>
-
+    <v-container class="bar-chart">
+      <v-card class="pa-3" variant="outlined">
+        <v-card-header-text>
+          <v-card-title>Retard des trains</v-card-title>
+          <BarChart :chartData="testData" />
+        </v-card-header-text>
+      </v-card>
+    </v-container>
     <v-container class="dates">
       <!-- Card dates -->
       <v-card class="pa-3" variant="outlined">
@@ -80,6 +87,14 @@
         </v-card-actions>
       </v-card>
     </v-container>
+    <v-container class="smiley-satisf mb-5">
+      <v-card class="pa-3" variant="outlined">
+        <v-card-header-text>
+          <v-card-title>Satisfaction Client Ponctualité</v-card-title>
+          
+        </v-card-header-text>
+      </v-card>
+    </v-container>
     <!-- <div class="row">
       <div class="col-md-6">
         <li v-for="gare in gareD" :key="gare">Gare de départ : {{ gare }}</li>
@@ -100,8 +115,10 @@
 <script>
 import axios from "axios";
 import * as _ from "underscore";
-import { BarChart, useBarChart } from "vue-chart-3";
-import { computed, ref } from "vue";
+import { BarChart } from "vue-chart-3";
+import { Chart, registerables } from "chart.js";
+
+Chart.register(...registerables);
 
 export default {
   name: "Home",
@@ -116,7 +133,18 @@ export default {
       gareA: [],
     };
   },
-  setup() {},
+  setup() {
+    const testData = {
+      labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet'],
+      datasets: [
+        {
+          data: [30, 40, 60, 70, 5, 85, 56],
+          backgroundColor: ['#77CEFF', '#0079AF', '#123E6B', '#97B0C4', '#A5C8ED', '#77CEFF', '#0079AF'],
+        },
+      ],
+    };
+    return { testData };
+  },
   computed: {
     // Enlever les doublons des gares de départs avec underscore
     withoutDoublonDeparts() {
@@ -161,7 +189,6 @@ export default {
     });
   },
 };
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -189,7 +216,7 @@ h1 {
   margin-bottom: 10px;
 }
 
-.dates{
+.dates {
   visibility: hidden;
 }
 </style>
