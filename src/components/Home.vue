@@ -37,7 +37,6 @@
           <select
             class="form-select"
             id="gareArrivee"
-            @change="correspondingLines($event)"
           >
             <option selected>Choisissez votre gare d'arrivée</option>
             <option
@@ -87,6 +86,7 @@
         </v-card-actions>
       </v-card>
     </v-container>
+<<<<<<< HEAD
     <v-container class="smiley-satisf mb-5">
       <v-card class="pa-3" variant="outlined">
         <v-card-header-text>
@@ -94,6 +94,10 @@
           
         </v-card-header-text>
       </v-card>
+=======
+    <v-container>
+      <li v-for="date in dateGares" :key="date"> {{ date }}</li>
+>>>>>>> v0.1m
     </v-container>
     <!-- <div class="row">
       <div class="col-md-6">
@@ -115,15 +119,20 @@
 <script>
 import axios from "axios";
 import * as _ from "underscore";
+<<<<<<< HEAD
 import { BarChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
 
 Chart.register(...registerables);
+=======
+// import { BarChart, useBarChart } from "vue-chart-3";
+// import { computed, ref } from "vue";
+>>>>>>> v0.1m
 
 export default {
   name: "Home",
   components: {
-    BarChart,
+    // BarChart,
   },
   data() {
     return {
@@ -131,6 +140,7 @@ export default {
       arrivalCorrespondence: [],
       gareD: [],
       gareA: [],
+      dateGares: [],
     };
   },
   setup() {
@@ -184,8 +194,10 @@ export default {
       // let item = Object.create(data);
       var gareDepart = element.fields.gare_depart;
       var gareArrivee = element.fields.gare_arrivee;
+      var dates = element.fields.date;
       this.gareD.push(gareDepart);
       this.gareA.push(gareArrivee);
+      this.dateGares.push(dates);
     });
   },
 };
