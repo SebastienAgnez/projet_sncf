@@ -47,7 +47,7 @@
             ></option>
           </select>
         </div>
-        <v-card-actions>
+        <v-card-actions class="justify-center">
           <v-btn class="mt-4" variant="outlined" rounded text> Valider </v-btn>
         </v-card-actions>
       </v-card>
@@ -74,19 +74,19 @@
             class="form-control"
           />
         </div>
-        <v-card-actions>
+        <v-card-actions class="justify-center">
           <v-btn class="mt-4" variant="outlined" rounded text> Valider </v-btn>
         </v-card-actions>
       </v-card>
     </v-container>
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-md-6">
         <li v-for="gare in gareD" :key="gare">Gare de départ : {{ gare }}</li>
       </div>
       <div class="col-md-6">
         <li v-for="gare in gareA" :key="gare">Gare d'arrivée : {{ gare }}</li>
       </div>
-    </div>
+    </div> -->
     <footer class="text-center text-white fixed-bottom">
       <div class="container p-4"></div>
       <div class="text-center p-3" style="background-color: #333333">
@@ -99,9 +99,14 @@
 <script>
 import axios from "axios";
 import * as _ from "underscore";
+import { BarChart, useBarChart } from "vue-chart-3";
+import { computed, ref } from "vue";
 
 export default {
   name: "Home",
+  components: {
+    BarChart,
+  },
   data() {
     return {
       infos: null,
@@ -110,7 +115,7 @@ export default {
       gareA: [],
     };
   },
-
+  setup() {},
   computed: {
     // Enlever les doublons des gares de départs avec underscore
     withoutDoublonDeparts() {
