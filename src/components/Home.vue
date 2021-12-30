@@ -37,7 +37,6 @@
           <select
             class="form-select"
             id="gareArrivee"
-            @change="correspondingLines($event)"
           >
             <option selected>Choisissez votre gare d'arrivée</option>
             <option
@@ -104,6 +103,7 @@
         </v-card-header-text>
       </v-card>
     </v-container>
+      <!-- <li v-for="date in dateGares" :key="date"> {{ date }}</li> -->
     <!-- <div class="row">
       <div class="col-md-6">
         <li v-for="gare in gareD" :key="gare">Gare de départ : {{ gare }}</li>
@@ -140,6 +140,7 @@ export default {
       arrivalCorrespondence: [],
       gareD: [],
       gareA: [],
+      dateGares: [],
       indicateurSelect: null,
       date: null,
       indicateurs: [],
@@ -208,8 +209,10 @@ export default {
     responseReg.data.records.forEach((element) => {
       var gareDepart = element.fields.gare_depart;
       var gareArrivee = element.fields.gare_arrivee;
+      var dates = element.fields.date;
       this.gareD.push(gareDepart);
       this.gareA.push(gareArrivee);
+      this.dateGares.push(dates);
     });
 
     const responseNotes = await axios.get(
