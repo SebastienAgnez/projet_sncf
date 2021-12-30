@@ -65,33 +65,42 @@
       <v-card class="pa-3" variant="outlined">
         <v-card-header-text>
           <v-card-title>Dates</v-card-title>
-        </v-card-header-text>
-        <div class="input-group">
-          <span class="input-group-text">Mois</span>
-          <input
-            type="month"
-            aria-label="First name"
-            class="form-control supp-border"
-          />
-          <span class="input-group-text border-droit">Années</span>
-          <input
-            type="number"
-            min="2000"
-            max=""
-            aria-label="Last name"
-            class="form-control"
-          />
-        </div>
-        <v-card-actions class="justify-center">
-          <v-btn class="mt-4" variant="outlined" rounded text> Valider </v-btn>
-        </v-card-actions>
+          </v-card-header-text>
+          <form method="post" @submit="satisfByDate">
+            <div class="input-group">
+              <span class="input-group-text">Mois-Années</span>
+              <input
+                type="month"
+                class="form-control supp-border"
+                name="date"
+                v-model="date"
+              />
+              <span class="input-group-text border-droit">Indicateurs</span>
+              <select
+                class="form-select"
+                id="indicateurs"
+                name="indicateurSelect"
+                v-model="indicateurSelect"
+              >
+                <option selected>Choisissez votre indicateur</option>
+                <option
+                  v-for="indicateurs in whithoutDoublonIndicators"
+                  v-bind:key="indicateurs"
+                  v-text="indicateurs"
+                ></option>
+              </select>
+            </div>
+            <v-card-actions class="justify-center">
+              <v-btn class="mt-4" variant="outlined" type="submit" rounded text> Valider </v-btn>
+            </v-card-actions>
+          </form>
       </v-card>
     </v-container>
     <v-container class="smiley-satisf mb-5">
       <v-card class="pa-3" variant="outlined">
         <v-card-header-text>
           <v-card-title>Satisfaction Client Ponctualité</v-card-title>
-          
+          {{infos}}
         </v-card-header-text>
       </v-card>
     </v-container>
@@ -127,10 +136,19 @@ export default {
   },
   data() {
     return {
-      infos: null,
+      infos: [],
       arrivalCorrespondence: [],
       gareD: [],
       gareA: [],
+      indicateurSelect: null,
+      date: null,
+      indicateurs: [],
+      ponctuality: [],
+      innovation: [],
+      environment: [],
+      overallScore: [],
+      price: [],
+      passengerInfo: []
     };
   },
   setup() {
@@ -154,6 +172,9 @@ export default {
     withoutDoublonCorrespondence() {
       return _.uniq(this.arrivalCorrespondence);
     },
+    whithoutDoublonIndicators() {
+      return _.uniq(this.indicateurs)
+    }
   },
 
   methods: {
@@ -167,26 +188,50 @@ export default {
         }
       }
     },
+    satisfByDate: function(e) {
+      console.log(this.date)
+      console.log(this.indicateurSelect)
+      e.preventDefault();
+    }
   },
   async mounted() {
-    axios
-      .get(
-        "https://data.sncf.com/api/records/1.0/search/?dataset=regularite-mensuelle-tgv-aqst&q=&rows=5500&sort=date&facet=date&facet=service&facet=gare_depart&facet=gare_arrivee"
-      )
-      .then((response) => (this.infos = response))
-      .catch((error) => console.log(error));
+    // axios
+    //   .get(
+    //     "https://data.sncf.com/api/records/1.0/search/?dataset=regularite-mensuelle-tgv-aqst&q=&rows=5500&sort=date&facet=date&facet=service&facet=gare_depart&facet=gare_arrivee"
+    //   )
+    //   .then((response) => (this.infos = response))
+    //   .catch((error) => console.log(error));
 
-    const response = await axios.get(
+    const responseReg = await axios.get(
       "https://data.sncf.com/api/records/1.0/search/?dataset=regularite-mensuelle-tgv-aqst&q=&rows=5500&sort=date&facet=date&facet=service&facet=gare_depart&facet=gare_arrivee"
     );
-    response.data.records.forEach((element) => {
-      // let data = {};
-      // let item = Object.create(data);
+    responseReg.data.records.forEach((element) => {
       var gareDepart = element.fields.gare_depart;
       var gareArrivee = element.fields.gare_arrivee;
       this.gareD.push(gareDepart);
       this.gareA.push(gareArrivee);
     });
+
+    const responseNotes = await axios.get(
+      "https://data.sncf.com/api/records/1.0/search/?dataset=barometre-notes-dopinion-sncf-gmv&q=&sort=column_1&facet=column_1&facet=column_2"
+    )
+    responseNotes.data.records.forEach((element) => {
+      this.infos.push(element);
+      this.indicateurs.push(element.fields.column_2);
+      if(element.fields.column_2 == 'Ponctualité') {
+        this.ponctuality.push(element)
+      } else if(element.fields.column_2 == 'Innovation') {
+        this.innovation.push(element)
+      } else if(element.fields.column_2 == 'Environnemnt') {
+        this.environment.push(element)
+      } else if(element.fields.column_2 == 'Note globale') {
+        this.overallScore.push(element)
+      } else if(element.fields.column_2 == 'Prix') {
+        this.price.push(element)
+      } else if(element.fields.column_2 == 'Information Voyageurs') {
+        this.passengerInfo.push(element)
+      } 
+    })
   },
 };
 </script>
@@ -216,7 +261,7 @@ h1 {
   margin-bottom: 10px;
 }
 
-.dates {
+/* .dates {
   visibility: hidden;
-}
+} */
 </style>
