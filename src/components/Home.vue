@@ -28,7 +28,7 @@
           >
             <option selected>Choisissez votre gare de départ</option>
             <option
-              v-for="gare in withoutDoublonDeparts"
+              v-for="gare in gareD"
               v-bind:key="gare"
               v-text="gare"
             ></option>
@@ -37,7 +37,7 @@
           <select class="form-select" id="gareArrivee">
             <option selected>Choisissez votre gare d'arrivée</option>
             <option
-              v-for="gare in withoutDoublonCorrespondence"
+              v-for="gare in arrivalCorrespondence"
               v-bind:key="gare"
               v-text="gare"
             ></option>
@@ -62,7 +62,7 @@
         <v-card-header-text>
           <v-card-title>Dates</v-card-title>
         </v-card-header-text>
-        <form method="post" @submit="satisfByDate">
+        <form method="post">
           <div class="input-group">
             <span class="input-group-text">Mois-Années</span>
             <input
@@ -80,21 +80,28 @@
             >
               <option selected>Choisissez votre indicateur</option>
               <option
-                v-for="indicateurs in whithoutDoublonIndicators"
-                v-bind:key="indicateurs"
-                v-text="indicateurs"
+                v-for="indicateur in indicateurs"
+                v-bind:key="indicateur"
+                v-text="indicateur"
               ></option>
             </select>
           </div>
           <v-card-actions class="justify-center">
-            <v-btn class="mt-4" variant="outlined" type="submit" rounded text>
+            <v-btn
+              class="mt-4"
+              variant="outlined"
+              @click="doSatisf"
+              rounded
+              text
+            >
               Valider
             </v-btn>
           </v-card-actions>
         </form>
       </v-card>
     </v-container>
-    <v-container v-if="satisfaction" class="smiley-satisf mb-5">
+    <v-container v-if="satisfaction" class="smiley-satisf">
+      <!-- Card notes satisfaction client -->
       <v-card class="pa-3" variant="outlined">
         <v-card-header-text>
           <v-card-title>Satisfaction Client</v-card-title>
@@ -114,22 +121,9 @@
               <div>{{ satisfaction }} / 10</div>
             </div>
           </span>
-          <div v-else>
-            Pas de note
-            <div>-- / 10</div>
-          </div>
         </v-card-header-text>
       </v-card>
     </v-container>
-    <!-- <li v-for="date in dateGares" :key="date"> {{ date }}</li> -->
-    <!-- <div class="row">
-      <div class="col-md-6">
-        <li v-for="gare in gareD" :key="gare">Gare de départ : {{ gare }}</li>
-      </div>
-      <div class="col-md-6">
-        <li v-for="gare in gareA" :key="gare">Gare d'arrivée : {{ gare }}</li>
-      </div>
-    </div> -->
     <footer class="text-center text-white fixed-bottom mt-4">
       <div class="text-center p-3" style="background-color: #333333">
         © 2021 Copyright : AGNEZ Sébastien - BACQUET Manon
@@ -140,7 +134,7 @@
 
 <script>
 import axios from "axios";
-import * as _ from "underscore";
+import { mapGetters, mapActions } from "vuex";
 import { BarChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
 
@@ -151,18 +145,28 @@ export default {
   components: {
     BarChart,
   },
-  data() {
-    return {
-      infos: [],
-      arrivalCorrespondence: [],
-      gareD: [],
-      gareA: [],
-      dateGares: [],
-      indicateurSelect: null,
-      date: null,
-      indicateurs: [],
-      satisfaction: null,
-    };
+  data: () => ({
+    indicateurSelect: null,
+    date: null,
+  }),
+  computed: {
+    ...mapGetters([
+      "gareD",
+      "gareA",
+      "dateGares",
+      "indicateurs",
+      "infos",
+      "satisfaction",
+      "arrivalCorrespondence",
+      "indicateurs",
+    ]),
+  },
+  methods: {
+    ...mapActions(["satisfByDate", "correspondingLines"]),
+    doSatisf() {
+      const { indicateurSelect, date } = this;
+      this.satisfByDate({ indicateurSelect, date });
+    },
   },
   setup() {
     const testData = {
@@ -184,55 +188,8 @@ export default {
     };
     return { testData };
   },
-  computed: {
-    // Enlever les doublons des gares de départs avec underscore
-    withoutDoublonDeparts() {
-      return _.uniq(this.gareD);
-    },
-
-    withoutDoublonCorrespondence() {
-      return _.uniq(this.arrivalCorrespondence);
-    },
-    whithoutDoublonIndicators() {
-      return _.uniq(this.indicateurs);
-    },
-  },
-
-  methods: {
-    //Faire correspondre les gares de départs et d'arrivées
-    correspondingLines(event) {
-      console.log("Notre input : ", event.target.value);
-      this.arrivalCorrespondence = [];
-      for (let index = 0; index < this.gareD.length; index++) {
-        if (this.gareD[index] == event.target.value) {
-          this.arrivalCorrespondence.push(this.gareA[index]);
-        }
-      }
-    },
-    satisfByDate: function (e) {
-      this.satisfaction = null;
-      this.infos.forEach((element) => {
-        if (
-          this.date == element.fields.column_1 &&
-          this.indicateurSelect == element.fields.column_2
-        ) {
-          var noteClients = element.fields.column_4;
-          var noteFrancais = element.fields.column_3;
-          var moy = (noteClients + noteFrancais) / 2;
-          this.satisfaction = moy.toFixed(1);
-        }
-      });
-      e.preventDefault();
-    },
-  },
   async mounted() {
-    // axios
-    //   .get(
-    //     "https://data.sncf.com/api/records/1.0/search/?dataset=regularite-mensuelle-tgv-aqst&q=&rows=5500&sort=date&facet=date&facet=service&facet=gare_depart&facet=gare_arrivee"
-    //   )
-    //   .then((response) => (this.infos = response))
-    //   .catch((error) => console.log(error));
-
+    //Récupération des données du jeu de données : régularité mensuelle TGV par liaisons
     const responseReg = await axios.get(
       "https://data.sncf.com/api/records/1.0/search/?dataset=regularite-mensuelle-tgv-aqst&q=&rows=5500&sort=date&facet=date&facet=service&facet=gare_depart&facet=gare_arrivee"
     );
@@ -244,7 +201,10 @@ export default {
       this.gareA.push(gareArrivee);
       this.dateGares.push(dates);
     });
+    this.$store.dispatch("withoutDoublonDeparts");
+    this.$store.dispatch("withoutDoublonCorrespondence");
 
+    //Récupération des données du jeu de données : Baromètre notes d'opinion SNCF
     const responseNotes = await axios.get(
       "https://data.sncf.com/api/records/1.0/search/?dataset=barometre-notes-dopinion-sncf-gmv&q=&rows=5500&sort=column_1&facet=column_1&facet=column_2"
     );
@@ -252,6 +212,7 @@ export default {
       this.infos.push(element);
       this.indicateurs.push(element.fields.column_2);
     });
+    this.$store.dispatch("whithoutDoublonIndicators");
   },
 };
 </script>
