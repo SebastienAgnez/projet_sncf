@@ -34,10 +34,7 @@
             ></option>
           </select>
           <label class="input-group-text" for="gareArrivee">Arrivée</label>
-          <select
-            class="form-select"
-            id="gareArrivee"
-          >
+          <select class="form-select" id="gareArrivee">
             <option selected>Choisissez votre gare d'arrivée</option>
             <option
               v-for="gare in withoutDoublonCorrespondence"
@@ -64,46 +61,67 @@
       <v-card class="pa-3" variant="outlined">
         <v-card-header-text>
           <v-card-title>Dates</v-card-title>
-          </v-card-header-text>
-          <form method="post" @submit="satisfByDate">
-            <div class="input-group">
-              <span class="input-group-text">Mois-Années</span>
-              <input
-                type="month"
-                class="form-control supp-border"
-                name="date"
-                v-model="date"
-              />
-              <span class="input-group-text border-droit">Indicateurs</span>
-              <select
-                class="form-select"
-                id="indicateurs"
-                name="indicateurSelect"
-                v-model="indicateurSelect"
-              >
-                <option selected>Choisissez votre indicateur</option>
-                <option
-                  v-for="indicateurs in whithoutDoublonIndicators"
-                  v-bind:key="indicateurs"
-                  v-text="indicateurs"
-                ></option>
-              </select>
-            </div>
-            <v-card-actions class="justify-center">
-              <v-btn class="mt-4" variant="outlined" type="submit" rounded text> Valider </v-btn>
-            </v-card-actions>
-          </form>
+        </v-card-header-text>
+        <form method="post" @submit="satisfByDate">
+          <div class="input-group">
+            <span class="input-group-text">Mois-Années</span>
+            <input
+              type="month"
+              class="form-control supp-border"
+              name="date"
+              v-model="date"
+            />
+            <span class="input-group-text border-droit">Indicateurs</span>
+            <select
+              class="form-select"
+              id="indicateurs"
+              name="indicateurSelect"
+              v-model="indicateurSelect"
+            >
+              <option selected>Choisissez votre indicateur</option>
+              <option
+                v-for="indicateurs in whithoutDoublonIndicators"
+                v-bind:key="indicateurs"
+                v-text="indicateurs"
+              ></option>
+            </select>
+          </div>
+          <v-card-actions class="justify-center">
+            <v-btn class="mt-4" variant="outlined" type="submit" rounded text>
+              Valider
+            </v-btn>
+          </v-card-actions>
+        </form>
       </v-card>
     </v-container>
-    <v-container class="smiley-satisf mb-5">
+    <v-container v-if="satisfaction" class="smiley-satisf mb-5">
       <v-card class="pa-3" variant="outlined">
         <v-card-header-text>
-          <v-card-title>Satisfaction Client Ponctualité</v-card-title>
-          {{infos}}
+          <v-card-title>Satisfaction Client</v-card-title>
+          <span v-if="satisfaction">
+            <div v-if="10 >= this.satisfaction && this.satisfaction > 7">
+              <span class="material-icons emoticonsGood">insert_emoticon</span>
+              <div>{{ satisfaction }} / 10</div>
+            </div>
+            <div v-else-if="7 >= this.satisfaction && this.satisfaction > 4">
+              <span class="material-icons emoticonsNeutral"
+                >sentiment_neutral</span
+              >
+              <div>{{ satisfaction }} / 10</div>
+            </div>
+            <div v-else-if="4 >= this.satisfaction && this.satisfaction >= 0">
+              <span class="material-icons emoticonsBad">mood_bad</span>
+              <div>{{ satisfaction }} / 10</div>
+            </div>
+          </span>
+          <div v-else>
+            Pas de note
+            <div>-- / 10</div>
+          </div>
         </v-card-header-text>
       </v-card>
     </v-container>
-      <!-- <li v-for="date in dateGares" :key="date"> {{ date }}</li> -->
+    <!-- <li v-for="date in dateGares" :key="date"> {{ date }}</li> -->
     <!-- <div class="row">
       <div class="col-md-6">
         <li v-for="gare in gareD" :key="gare">Gare de départ : {{ gare }}</li>
@@ -112,8 +130,7 @@
         <li v-for="gare in gareA" :key="gare">Gare d'arrivée : {{ gare }}</li>
       </div>
     </div> -->
-    <footer class="text-center text-white fixed-bottom">
-      <div class="container p-4"></div>
+    <footer class="text-center text-white fixed-bottom mt-4">
       <div class="text-center p-3" style="background-color: #333333">
         © 2021 Copyright : AGNEZ Sébastien - BACQUET Manon
       </div>
@@ -144,21 +161,24 @@ export default {
       indicateurSelect: null,
       date: null,
       indicateurs: [],
-      ponctuality: [],
-      innovation: [],
-      environment: [],
-      overallScore: [],
-      price: [],
-      passengerInfo: []
+      satisfaction: null,
     };
   },
   setup() {
     const testData = {
-      labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet'],
+      labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet"],
       datasets: [
         {
           data: [30, 40, 60, 70, 5, 85, 56],
-          backgroundColor: ['#77CEFF', '#0079AF', '#123E6B', '#97B0C4', '#A5C8ED', '#77CEFF', '#0079AF'],
+          backgroundColor: [
+            "#77CEFF",
+            "#0079AF",
+            "#123E6B",
+            "#97B0C4",
+            "#A5C8ED",
+            "#77CEFF",
+            "#0079AF",
+          ],
         },
       ],
     };
@@ -174,8 +194,8 @@ export default {
       return _.uniq(this.arrivalCorrespondence);
     },
     whithoutDoublonIndicators() {
-      return _.uniq(this.indicateurs)
-    }
+      return _.uniq(this.indicateurs);
+    },
   },
 
   methods: {
@@ -189,11 +209,21 @@ export default {
         }
       }
     },
-    satisfByDate: function(e) {
-      console.log(this.date)
-      console.log(this.indicateurSelect)
+    satisfByDate: function (e) {
+      this.satisfaction = null;
+      this.infos.forEach((element) => {
+        if (
+          this.date == element.fields.column_1 &&
+          this.indicateurSelect == element.fields.column_2
+        ) {
+          var noteClients = element.fields.column_4;
+          var noteFrancais = element.fields.column_3;
+          var moy = (noteClients + noteFrancais) / 2;
+          this.satisfaction = moy.toFixed(1);
+        }
+      });
       e.preventDefault();
-    }
+    },
   },
   async mounted() {
     // axios
@@ -216,25 +246,12 @@ export default {
     });
 
     const responseNotes = await axios.get(
-      "https://data.sncf.com/api/records/1.0/search/?dataset=barometre-notes-dopinion-sncf-gmv&q=&sort=column_1&facet=column_1&facet=column_2"
-    )
+      "https://data.sncf.com/api/records/1.0/search/?dataset=barometre-notes-dopinion-sncf-gmv&q=&rows=5500&sort=column_1&facet=column_1&facet=column_2"
+    );
     responseNotes.data.records.forEach((element) => {
       this.infos.push(element);
       this.indicateurs.push(element.fields.column_2);
-      if(element.fields.column_2 == 'Ponctualité') {
-        this.ponctuality.push(element)
-      } else if(element.fields.column_2 == 'Innovation') {
-        this.innovation.push(element)
-      } else if(element.fields.column_2 == 'Environnemnt') {
-        this.environment.push(element)
-      } else if(element.fields.column_2 == 'Note globale') {
-        this.overallScore.push(element)
-      } else if(element.fields.column_2 == 'Prix') {
-        this.price.push(element)
-      } else if(element.fields.column_2 == 'Information Voyageurs') {
-        this.passengerInfo.push(element)
-      } 
-    })
+    });
   },
 };
 </script>
@@ -262,6 +279,21 @@ h1 {
 
 .v-container {
   margin-bottom: 10px;
+}
+
+.emoticonsGood {
+  font-size: 130px;
+  color: green;
+}
+
+.emoticonsNeutral {
+  font-size: 130px;
+  color: orange;
+}
+
+.emoticonsBad {
+  font-size: 130px;
+  color: red;
 }
 
 /* .dates {
