@@ -144,7 +144,7 @@
         </v-card-header-text>
       </v-card>
     </v-container>
-    <footer class="text-center text-white fixed-bottom mt-4">
+    <footer class="text-center text-white mt-4">
       <div class="text-center p-3" style="background-color: #333333">
         © 2021 Copyright : AGNEZ Sébastien - BACQUET Manon
       </div>
