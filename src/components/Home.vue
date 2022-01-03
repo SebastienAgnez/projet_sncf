@@ -19,39 +19,59 @@
         <v-card-header>
           <v-card-title>Ligne directe</v-card-title>
         </v-card-header>
-        <div class="input-group mb-3">
-          <label class="input-group-text" for="gareDepart">Départ</label>
-          <select
-            class="form-select"
-            id="gareDepart"
-            @change="correspondingLines($event)"
-          >
-            <option selected>Choisissez votre gare de départ</option>
-            <option
-              v-for="gare in gareD"
-              v-bind:key="gare"
-              v-text="gare"
-            ></option>
-          </select>
-          <label class="input-group-text" for="gareArrivee">Arrivée</label>
-          <select class="form-select" id="gareArrivee">
-            <option selected>Choisissez votre gare d'arrivée</option>
-            <option
-              v-for="gare in arrivalCorrespondence"
-              v-bind:key="gare"
-              v-text="gare"
-            ></option>
-          </select>
-        </div>
-        <v-card-actions class="justify-center">
-          <v-btn class="mt-4" variant="outlined" rounded text> Valider </v-btn>
-        </v-card-actions>
+        <form method="post">
+          <div class="input-group mb-3">
+            <label class="input-group-text" for="gareDepart">Départ</label>
+            <select
+              class="form-select"
+              id="gareDepart"
+              name="depart"
+              v-model="depart"
+              @change="correspondingLines($event)"
+            >
+              <option selected>Choisissez votre gare de départ</option>
+              <option
+                v-for="gare in gareD"
+                v-bind:key="gare"
+                v-text="gare"
+              ></option>
+            </select>
+            <label class="input-group-text" for="gareArrivee">Arrivée</label>
+            <select
+              class="form-select"
+              id="gareArrivee"
+              name="arrivee"
+              v-model="arrivee"
+            >
+              <option selected>Choisissez votre gare d'arrivée</option>
+              <option
+                v-for="gare in arrivalCorrespondence"
+                v-bind:key="gare"
+                v-text="gare"
+              ></option>
+            </select>
+          </div>
+          <v-card-actions class="justify-center">
+            <v-btn
+              @click="doBarChart"
+              class="mt-4"
+              variant="outlined"
+              rounded
+              text
+            >
+              Valider
+            </v-btn>
+          </v-card-actions>
+        </form>
       </v-card>
     </v-container>
     <v-container class="bar-chart">
       <v-card class="pa-3" variant="outlined">
         <v-card-header-text>
-          <v-card-title>Retard des trains</v-card-title>
+          <v-card-title
+            >Retard des trains pour le trajet : {{ depart }} -
+            {{ arrivee }}</v-card-title
+          >
           <BarChart :chartData="testData" />
         </v-card-header-text>
       </v-card>
@@ -148,6 +168,8 @@ export default {
   data: () => ({
     indicateurSelect: null,
     date: null,
+    depart: null,
+    arrivee: null,
   }),
   computed: {
     ...mapGetters([
@@ -159,10 +181,15 @@ export default {
       "satisfaction",
       "arrivalCorrespondence",
       "indicateurs",
+      "dateCorrespondence",
     ]),
   },
   methods: {
-    ...mapActions(["satisfByDate", "correspondingLines"]),
+    ...mapActions(["satisfByDate", "correspondingLines", "correspondingDates"]),
+    doBarChart() {
+      const { depart, arrivee } = this;
+      this.correspondingDates({ depart, arrivee });
+    },
     doSatisf() {
       const { indicateurSelect, date } = this;
       this.satisfByDate({ indicateurSelect, date });

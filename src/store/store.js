@@ -13,6 +13,7 @@ const state = {
   dateGares: [],
   indicateurs: [],
   satisfaction: null,
+  dateCorrespondence: [],
 };
 
 const getters = {
@@ -37,6 +38,9 @@ const getters = {
   arrivalCorrespondence: state => {
     return state.arrivalCorrespondence
   },
+  dateCorrespondence: state => {
+    return state.dateCorrespondence;
+  }
 
 }
 
@@ -49,6 +53,21 @@ const mutations = {
         state.arrivalCorrespondence.push(state.gareA[index]);
       }
     }
+  },
+  //Trier les dates selon le trajet
+  correspondingDates(state, item) {
+    var depart = item.depart
+    var arrivee = item.arrivee
+    const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+    for (let index = 0; index < state.gareD.length; index++) {
+      if (state.gareD[index] == depart && state.gareA[index] == arrivee) {
+        var date = new Date(state.dateGares[index]);
+        let month = months[date.getMonth()]
+        var dateStr = month + " " + date.getFullYear();
+        state.dateCorrespondence.push(dateStr);
+      }
+    }
+    console.log(state.dateCorrespondence);
   },
   //Calculer la moyenne des notes des clients selon la date choisie
   satisfByDate(state, item) {
@@ -76,6 +95,9 @@ const mutations = {
 const actions = {
   correspondingLines({ commit }, item) {
     commit('correspondingLines', item);
+  },
+  correspondingDates({ commit }, item) {
+    commit('correspondingDates', item)
   },
   satisfByDate({ commit }, item) {
     commit('satisfByDate', item);
