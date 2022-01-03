@@ -40,8 +40,7 @@ const getters = {
   },
   dateCorrespondence: state => {
     return state.dateCorrespondence;
-  }
-
+  },
 }
 
 const mutations = {

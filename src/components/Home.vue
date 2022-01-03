@@ -29,7 +29,7 @@
               v-model="depart"
               @change="correspondingLines($event)"
             >
-              <option selected>Choisissez votre gare de départ</option>
+              <option selected disabled>Choisissez votre gare de départ</option>
               <option
                 v-for="gare in gareD"
                 v-bind:key="gare"
@@ -43,7 +43,7 @@
               name="arrivee"
               v-model="arrivee"
             >
-              <option selected>Choisissez votre gare d'arrivée</option>
+              <option selected disabled>Choisissez votre gare d'arrivée</option>
               <option
                 v-for="gare in arrivalCorrespondence"
                 v-bind:key="gare"
@@ -98,7 +98,7 @@
               name="indicateurSelect"
               v-model="indicateurSelect"
             >
-              <option selected>Choisissez votre indicateur</option>
+              <option selected disabled>Choisissez votre indicateur</option>
               <option
                 v-for="indicateur in indicateurs"
                 v-bind:key="indicateur"
@@ -166,10 +166,10 @@ export default {
     BarChart,
   },
   data: () => ({
-    indicateurSelect: null,
+    indicateurSelect: "Choisissez votre indicateur",
     date: null,
-    depart: null,
-    arrivee: null,
+    depart: "Choisissez votre gare de départ",
+    arrivee: "Choisissez votre gare d'arrivée",
   }),
   computed: {
     ...mapGetters([
