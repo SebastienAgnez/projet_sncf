@@ -10,10 +10,15 @@ const state = {
   arrivalCorrespondence: [],
   gareD: [],
   gareA: [],
+  gareDepDate: [],
+  gareArrDate: [],
   dateGares: [],
   indicateurs: [],
   satisfaction: null,
   dateCorrespondence: [],
+  dataFields: [],
+  pourcCause: [],
+  verifCauseBool: null
 };
 
 const getters = {
@@ -22,6 +27,12 @@ const getters = {
   },
   gareA: state => {
     return state.gareA;
+  },
+  gareDepDate: state => {
+    return state.gareDepDate
+  },
+  gareArrDate: state => {
+    return state.gareArrDate
   },
   dateGares: state => {
     return state.dateGares;
@@ -41,25 +52,35 @@ const getters = {
   dateCorrespondence: state => {
     return state.dateCorrespondence;
   },
+  dataFields: state => {
+    return state.dataFields
+  },
+  pourcCause: state => {
+    return state.pourcCause
+  },
+  verifCauseBool: state => {
+    return state.verifCauseBool
+  }
 }
 
 const mutations = {
   //Faire correspondre les gares de départs et d'arrivées
   correspondingLines(state, item) {
     state.arrivalCorrespondence = [];
-    for (let index = 0; index < state.gareD.length; index++) {
-      if (state.gareD[index] == item.target.value) {
+    for (let index = 0; index < state.gareDepDate.length; index++) {
+      if (state.gareDepDate[index] == item.target.value) {
         state.arrivalCorrespondence.push(state.gareA[index]);
       }
     }
+    state.arrivalCorrespondence = _.uniq(state.arrivalCorrespondence)
   },
   //Trier les dates selon le trajet
   correspondingDates(state, item) {
     var depart = item.depart
     var arrivee = item.arrivee
     const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
-    for (let index = 0; index < state.gareD.length; index++) {
-      if (state.gareD[index] == depart && state.gareA[index] == arrivee) {
+    for (let index = 0; index < state.gareDepDate.length; index++) {
+      if (state.gareDepDate[index] == depart && state.gareArrDate[index] == arrivee) {
         var date = new Date(state.dateGares[index]);
         let month = months[date.getMonth()]
         var dateStr = month + " " + date.getFullYear();
@@ -79,6 +100,24 @@ const mutations = {
         state.satisfaction = moy.toFixed(1);
       }
     });
+  },
+  //Ajout des pourcentages de cause des retards
+  causeRetByGare(state, item) {
+    var depart = item.departCause
+    var arrivee = item.arriveeCause
+    var date = item.dateCause
+    state.pourcCause = []
+    for (var i = 0; i < state.dataFields.length; i++) {
+      if (state.gareDepDate[i] == depart && state.gareArrDate[i] == arrivee && state.dateGares[i] == date) {
+        state.pourcCause.push(state.dataFields[i].prct_cause_externe.toFixed(1))
+        state.pourcCause.push(state.dataFields[i].prct_cause_gestion_gare.toFixed(1))
+        state.pourcCause.push(state.dataFields[i].prct_cause_gestion_trafic.toFixed(1))
+        state.pourcCause.push(state.dataFields[i].prct_cause_infra.toFixed(1))
+        state.pourcCause.push(state.dataFields[i].prct_cause_materiel_roulant.toFixed(1))
+        state.pourcCause.push(state.dataFields[i].prct_cause_prise_en_charge_voyageurs.toFixed(1))
+      }
+    }
+    state.verifCauseBool = 1
   },
   withoutDoublonDeparts(state) {
     state.gareD = _.uniq(state.gareD);
@@ -100,6 +139,9 @@ const actions = {
   },
   satisfByDate({ commit }, item) {
     commit('satisfByDate', item);
+  },
+  causeRetByGare({ commit }, item) {
+    commit('causeRetByGare', item);
   },
   withoutDoublonDeparts({ commit }, item) {
     commit('withoutDoublonDeparts', item)
