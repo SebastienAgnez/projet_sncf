@@ -17,7 +17,6 @@ const state = {
   satisfaction: null,
   dateCorrespondence: [],
   dataFields: [],
-  pourcCause: [],
   verifCauseBool: null,
   dataPieChart: {
     labels: [
@@ -131,17 +130,6 @@ const mutations = {
     var depart = item.departCause
     var arrivee = item.arriveeCause
     var date = item.dateCause
-    // state.pourcCause = []
-    // for (var i = 0; i < state.dataFields.length; i++) {
-    //   if (state.gareDepDate[i] == depart && state.gareArrDate[i] == arrivee && state.dateGares[i] == date) {
-    //     state.pourcCause.push(state.dataFields[i].prct_cause_externe.toFixed(1))
-    //     state.pourcCause.push(state.dataFields[i].prct_cause_gestion_gare.toFixed(1))
-    //     state.pourcCause.push(state.dataFields[i].prct_cause_gestion_trafic.toFixed(1))
-    //     state.pourcCause.push(state.dataFields[i].prct_cause_infra.toFixed(1))
-    //     state.pourcCause.push(state.dataFields[i].prct_cause_materiel_roulant.toFixed(1))
-    //     state.pourcCause.push(state.dataFields[i].prct_cause_prise_en_charge_voyageurs.toFixed(1))
-    //   }
-    // }
     state.dataPieChart.datasets[0].data = []
     for (var i = 0; i < state.dataFields.length; i++) {
       if (state.gareDepDate[i] == depart && state.gareArrDate[i] == arrivee && state.dateGares[i] == date) {
@@ -153,6 +141,7 @@ const mutations = {
         state.dataPieChart.datasets[0].data.push(state.dataFields[i].prct_cause_prise_en_charge_voyageurs.toFixed(1))
       }
     }
+    console.log(state.dataPieChart.datasets[0].data)
     state.verifCauseBool = 1
   },
   withoutDoublonDeparts(state) {

@@ -210,7 +210,6 @@
             >Pourcentage des causes de retard : {{ departCause }} -
             {{ arriveeCause }} - {{ dateCause }}</v-card-title
           >
-          {{ pourcCause }}
           <PieChart :chartData="dataPieChart" />
         </v-card-header-text>
       </v-card>
@@ -260,7 +259,6 @@ export default {
       "gareDepDate",
       "gareArrDate",
       "dataFields",
-      "pourcCause",
       "verifCauseBool",
       "dataPieChart",
     ]),
@@ -284,11 +282,6 @@ export default {
       const { departCause, arriveeCause, dateCause } = this;
       this.causeRetByGare({ departCause, arriveeCause, dateCause });
     },
-    // dochart() {
-    //   this.dataPieChart.datasets[0].data.push(this.pourcCause);
-    //   console.log(this.dataPieChart.datasets[0].data);
-    //   return this.dataPieChart;
-    // },
   },
   setup() {
     const dataBarChart = {
@@ -308,29 +301,6 @@ export default {
         },
       ],
     };
-    // const dataPieChart = {
-    //   labels: [
-    //     "Causes externes",
-    //     "Cause gestion gare",
-    //     "Cause gestion trafic",
-    //     "Causes infrastructures",
-    //     "Cause matériel roulant",
-    //     "Cause prise en charge voyageurs",
-    //   ],
-    //   datasets: [
-    //     {
-    //       // data: [],
-    //       data: ["30.3", "12.1", "15.2", "18.2", "12.1", "12.1"],
-    //       backgroundColor: [
-    //         "#77CEFF",
-    //         "#0079AF",
-    //         "#123E6B",
-    //         "#97B0C4",
-    //         "#A5C8ED",
-    //       ],
-    //     },
-    //   ],
-    // };
     return { dataBarChart };
   },
   async mounted() {
