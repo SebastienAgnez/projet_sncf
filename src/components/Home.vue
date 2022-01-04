@@ -29,7 +29,7 @@
               v-model="depart"
               @change="correspondingLines($event)"
             >
-              <option selected>Choisissez votre gare de départ</option>
+              <option selected disabled>Choisissez votre gare de départ</option>
               <option
                 v-for="gare in gareD"
                 v-bind:key="gare"
@@ -43,7 +43,7 @@
               name="arrivee"
               v-model="arrivee"
             >
-              <option selected>Choisissez votre gare d'arrivée</option>
+              <option selected disabled>Choisissez votre gare d'arrivée</option>
               <option
                 v-for="gare in arrivalCorrespondence"
                 v-bind:key="gare"
@@ -72,7 +72,7 @@
             >Retard des trains pour le trajet : {{ depart }} -
             {{ arrivee }}</v-card-title
           >
-          <BarChart :chartData="testData" />
+          <BarChart :chartData="dataBarChart" />
         </v-card-header-text>
       </v-card>
     </v-container>
@@ -98,7 +98,7 @@
               name="indicateurSelect"
               v-model="indicateurSelect"
             >
-              <option selected>Choisissez votre indicateur</option>
+              <option selected disabled>Choisissez votre indicateur</option>
               <option
                 v-for="indicateur in indicateurs"
                 v-bind:key="indicateur"
@@ -144,6 +144,79 @@
         </v-card-header-text>
       </v-card>
     </v-container>
+<<<<<<< HEAD
+=======
+    <v-container class="Causes_retard">
+      <!-- Card Causes retard -->
+      <v-card class="pa-3" variant="outlined">
+        <v-card-header-text>
+          <v-card-title>Causes des retards</v-card-title>
+        </v-card-header-text>
+        <form method="post">
+          <div class="input-group mb-3">
+            <label class="input-group-text" for="gareDepart">Départ</label>
+            <select
+              class="form-select"
+              id="gareDepart"
+              name="departCause"
+              v-model="departCause"
+              @change="correspondingLines($event)"
+            >
+              <option selected disabled>Choisissez votre gare de départ</option>
+              <option
+                v-for="gare in gareD"
+                v-bind:key="gare"
+                v-text="gare"
+              ></option>
+            </select>
+            <label class="input-group-text" for="gareArrivee">Arrivée</label>
+            <select
+              class="form-select"
+              id="gareArrivee"
+              name="arriveeCause"
+              v-model="arriveeCause"
+            >
+              <option selected disabled>Choisissez votre gare d'arrivée</option>
+              <option
+                v-for="gare in arrivalCorrespondence"
+                v-bind:key="gare"
+                v-text="gare"
+              ></option>
+            </select>
+            <span class="input-group-text">Mois-Années</span>
+            <input
+              type="month"
+              class="form-control"
+              name="dateCause"
+              v-model="dateCause"
+            />
+          </div>
+          <v-card-actions class="justify-center">
+            <v-btn
+              @click="doPieChart"
+              class="mt-4"
+              variant="outlined"
+              rounded
+              text
+            >
+              Valider
+            </v-btn>
+          </v-card-actions>
+        </form>
+      </v-card>
+    </v-container>
+    <v-container v-if="verifCauseBool" class="piechart-chart">
+      <v-card class="pa-3" variant="outlined">
+        <v-card-header-text>
+          <v-card-title
+            >Pourcentage des causes de retard : {{ departCause }} -
+            {{ arriveeCause }} - {{ dateCause }}</v-card-title
+          >
+          <PieChart :chartData="dataPieChart" />
+        </v-card-header-text>
+      </v-card>
+    </v-container>
+>>>>>>> 45affcc25cbb7b52e0e020c497c462c0ea46107d
     <footer class="text-center text-white mt-4">
       <div class="text-center p-3" style="background-color: #333333">
         © 2021 Copyright : AGNEZ Sébastien - BACQUET Manon
@@ -155,7 +228,7 @@
 <script>
 import axios from "axios";
 import { mapGetters, mapActions } from "vuex";
-import { BarChart } from "vue-chart-3";
+import { BarChart, PieChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
 
 Chart.register(...registerables);
@@ -164,12 +237,16 @@ export default {
   name: "Home",
   components: {
     BarChart,
+    PieChart,
   },
   data: () => ({
-    indicateurSelect: null,
+    indicateurSelect: "Choisissez votre indicateur",
     date: null,
-    depart: null,
-    arrivee: null,
+    depart: "Choisissez votre gare de départ",
+    arrivee: "Choisissez votre gare d'arrivée",
+    departCause: "Choisissez votre gare de départ",
+    arriveeCause: "Choisissez votre gare d'arrivée",
+    dateCause: null,
   }),
   computed: {
     ...mapGetters([
@@ -190,11 +267,28 @@ export default {
       "arrivalCorrespondence",
       "indicateurs",
       "dateCorrespondence",
+<<<<<<< HEAD
       "moyenneLate",
     ]),
   },
   methods: {
     ...mapActions(["satisfByDate", "correspondingLines", "correspondingDates", "correspondingLates", "moyenneRetard"]),
+=======
+      "gareDepDate",
+      "gareArrDate",
+      "dataFields",
+      "verifCauseBool",
+      "dataPieChart",
+    ]),
+  },
+  methods: {
+    ...mapActions([
+      "satisfByDate",
+      "correspondingLines",
+      "correspondingDates",
+      "causeRetByGare",
+    ]),
+>>>>>>> 45affcc25cbb7b52e0e020c497c462c0ea46107d
     doBarChart() {
       const { depart, arrivee } = this;
       this.correspondingDates({ depart, arrivee });
@@ -205,9 +299,13 @@ export default {
       const { indicateurSelect, date } = this;
       this.satisfByDate({ indicateurSelect, date });
     },
+    doPieChart() {
+      const { departCause, arriveeCause, dateCause } = this;
+      this.causeRetByGare({ departCause, arriveeCause, dateCause });
+    },
   },
   setup() {
-    const testData = {
+    const dataBarChart = {
       labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet"],
       datasets: [
         {
@@ -224,7 +322,7 @@ export default {
         },
       ],
     };
-    return { testData };
+    return { dataBarChart };
   },
   async mounted() {
     //Récupération des données du jeu de données : régularité mensuelle TGV par liaisons
@@ -243,6 +341,7 @@ export default {
       this.gareDepDate.push(gareDepart);
       this.gareArrDate.push(gareArrivee);
       this.dateGares.push(dates);
+      this.dataFields.push(element.fields);
     });
     this.$store.dispatch("withoutDoublonDeparts");
     this.$store.dispatch("withoutDoublonCorrespondence");

@@ -23,7 +23,34 @@ const state = {
   indicateurs: [],
   satisfaction: null,
   dateCorrespondence: [],
+<<<<<<< HEAD
   moyenneLate: null,
+=======
+  dataFields: [],
+  verifCauseBool: null,
+  dataPieChart: {
+    labels: [
+      "Causes externes",
+      "Cause gestion gare",
+      "Cause gestion trafic",
+      "Causes infrastructures",
+      "Cause matériel roulant",
+      "Cause prise en charge voyageurs",
+    ],
+    datasets: [
+      {
+        data: [],
+        backgroundColor: [
+          "#77CEFF",
+          "#0079AF",
+          "#123E6B",
+          "#97B0C4",
+          "#A5C8ED",
+        ],
+      },
+    ],
+  },
+>>>>>>> 45affcc25cbb7b52e0e020c497c462c0ea46107d
 };
 
 const getters = {
@@ -75,28 +102,45 @@ const getters = {
   dateCorrespondence: state => {
     return state.dateCorrespondence;
   },
+<<<<<<< HEAD
   moyenneLate: state => {
     return state.moyenneLate;
+=======
+  dataFields: state => {
+    return state.dataFields
+  },
+  pourcCause: state => {
+    return state.pourcCause
+  },
+  verifCauseBool: state => {
+    return state.verifCauseBool
+  },
+  dataPieChart: state => {
+    return state.dataPieChart
+>>>>>>> 45affcc25cbb7b52e0e020c497c462c0ea46107d
   }
-
 }
 
 const mutations = {
   //Faire correspondre les gares de départs et d'arrivées
   correspondingLines(state, item) {
     state.arrivalCorrespondence = [];
-    for (let index = 0; index < state.gareD.length; index++) {
-      if (state.gareD[index] == item.target.value) {
+    for (let index = 0; index < state.gareDepDate.length; index++) {
+      if (state.gareDepDate[index] == item.target.value) {
         state.arrivalCorrespondence.push(state.gareA[index]);
       }
     }
+    state.arrivalCorrespondence = _.uniq(state.arrivalCorrespondence)
   },
   //Trier les dates selon le trajet
   correspondingDates(state, item) {
     var depart = item.depart
     var arrivee = item.arrivee
     const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+<<<<<<< HEAD
     state.dateCorrespondence = [];
+=======
+>>>>>>> 45affcc25cbb7b52e0e020c497c462c0ea46107d
     for (let index = 0; index < state.gareDepDate.length; index++) {
       if (state.gareDepDate[index] == depart && state.gareArrDate[index] == arrivee) {
         var date = new Date(state.dateGares[index]);
@@ -151,6 +195,24 @@ const mutations = {
       }
     });
   },
+  //Ajout des pourcentages de cause des retards
+  causeRetByGare(state, item) {
+    var depart = item.departCause
+    var arrivee = item.arriveeCause
+    var date = item.dateCause
+    state.dataPieChart.datasets[0].data = []
+    for (var i = 0; i < state.dataFields.length; i++) {
+      if (state.gareDepDate[i] == depart && state.gareArrDate[i] == arrivee && state.dateGares[i] == date) {
+        state.dataPieChart.datasets[0].data.push(state.dataFields[i].prct_cause_externe.toFixed(1))
+        state.dataPieChart.datasets[0].data.push(state.dataFields[i].prct_cause_gestion_gare.toFixed(1))
+        state.dataPieChart.datasets[0].data.push(state.dataFields[i].prct_cause_gestion_trafic.toFixed(1))
+        state.dataPieChart.datasets[0].data.push(state.dataFields[i].prct_cause_infra.toFixed(1))
+        state.dataPieChart.datasets[0].data.push(state.dataFields[i].prct_cause_materiel_roulant.toFixed(1))
+        state.dataPieChart.datasets[0].data.push(state.dataFields[i].prct_cause_prise_en_charge_voyageurs.toFixed(1))
+      }
+    }
+    state.verifCauseBool = 1
+  },
   withoutDoublonDeparts(state) {
     state.gareD = _.uniq(state.gareD);
   },
@@ -177,6 +239,9 @@ const actions = {
   },
   satisfByDate({ commit }, item) {
     commit('satisfByDate', item);
+  },
+  causeRetByGare({ commit }, item) {
+    commit('causeRetByGare', item);
   },
   withoutDoublonDeparts({ commit }, item) {
     commit('withoutDoublonDeparts', item)
