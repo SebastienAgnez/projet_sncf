@@ -261,6 +261,7 @@ export default {
       "dataFields",
       "verifCauseBool",
       "dataPieChart",
+      "dataBarChart",
     ]),
   },
   methods: {
@@ -282,26 +283,6 @@ export default {
       const { departCause, arriveeCause, dateCause } = this;
       this.causeRetByGare({ departCause, arriveeCause, dateCause });
     },
-  },
-  setup() {
-    const dataBarChart = {
-      labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet"],
-      datasets: [
-        {
-          data: [30, 40, 60, 70, 5, 85, 56],
-          backgroundColor: [
-            "#77CEFF",
-            "#0079AF",
-            "#123E6B",
-            "#97B0C4",
-            "#A5C8ED",
-            "#77CEFF",
-            "#0079AF",
-          ],
-        },
-      ],
-    };
-    return { dataBarChart };
   },
   async mounted() {
     //Récupération des données du jeu de données : régularité mensuelle TGV par liaisons
