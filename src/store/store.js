@@ -18,7 +18,29 @@ const state = {
   dateCorrespondence: [],
   dataFields: [],
   pourcCause: [],
-  verifCauseBool: null
+  verifCauseBool: null,
+  dataPieChart: {
+    labels: [
+      "Causes externes",
+      "Cause gestion gare",
+      "Cause gestion trafic",
+      "Causes infrastructures",
+      "Cause matériel roulant",
+      "Cause prise en charge voyageurs",
+    ],
+    datasets: [
+      {
+        data: [],
+        backgroundColor: [
+          "#77CEFF",
+          "#0079AF",
+          "#123E6B",
+          "#97B0C4",
+          "#A5C8ED",
+        ],
+      },
+    ],
+  },
 };
 
 const getters = {
@@ -60,6 +82,9 @@ const getters = {
   },
   verifCauseBool: state => {
     return state.verifCauseBool
+  },
+  dataPieChart: state => {
+    return state.dataPieChart
   }
 }
 
@@ -106,15 +131,26 @@ const mutations = {
     var depart = item.departCause
     var arrivee = item.arriveeCause
     var date = item.dateCause
-    state.pourcCause = []
+    // state.pourcCause = []
+    // for (var i = 0; i < state.dataFields.length; i++) {
+    //   if (state.gareDepDate[i] == depart && state.gareArrDate[i] == arrivee && state.dateGares[i] == date) {
+    //     state.pourcCause.push(state.dataFields[i].prct_cause_externe.toFixed(1))
+    //     state.pourcCause.push(state.dataFields[i].prct_cause_gestion_gare.toFixed(1))
+    //     state.pourcCause.push(state.dataFields[i].prct_cause_gestion_trafic.toFixed(1))
+    //     state.pourcCause.push(state.dataFields[i].prct_cause_infra.toFixed(1))
+    //     state.pourcCause.push(state.dataFields[i].prct_cause_materiel_roulant.toFixed(1))
+    //     state.pourcCause.push(state.dataFields[i].prct_cause_prise_en_charge_voyageurs.toFixed(1))
+    //   }
+    // }
+    state.dataPieChart.datasets[0].data = []
     for (var i = 0; i < state.dataFields.length; i++) {
       if (state.gareDepDate[i] == depart && state.gareArrDate[i] == arrivee && state.dateGares[i] == date) {
-        state.pourcCause.push(state.dataFields[i].prct_cause_externe.toFixed(1))
-        state.pourcCause.push(state.dataFields[i].prct_cause_gestion_gare.toFixed(1))
-        state.pourcCause.push(state.dataFields[i].prct_cause_gestion_trafic.toFixed(1))
-        state.pourcCause.push(state.dataFields[i].prct_cause_infra.toFixed(1))
-        state.pourcCause.push(state.dataFields[i].prct_cause_materiel_roulant.toFixed(1))
-        state.pourcCause.push(state.dataFields[i].prct_cause_prise_en_charge_voyageurs.toFixed(1))
+        state.dataPieChart.datasets[0].data.push(state.dataFields[i].prct_cause_externe.toFixed(1))
+        state.dataPieChart.datasets[0].data.push(state.dataFields[i].prct_cause_gestion_gare.toFixed(1))
+        state.dataPieChart.datasets[0].data.push(state.dataFields[i].prct_cause_gestion_trafic.toFixed(1))
+        state.dataPieChart.datasets[0].data.push(state.dataFields[i].prct_cause_infra.toFixed(1))
+        state.dataPieChart.datasets[0].data.push(state.dataFields[i].prct_cause_materiel_roulant.toFixed(1))
+        state.dataPieChart.datasets[0].data.push(state.dataFields[i].prct_cause_prise_en_charge_voyageurs.toFixed(1))
       }
     }
     state.verifCauseBool = 1
