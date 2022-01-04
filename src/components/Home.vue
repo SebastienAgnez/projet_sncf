@@ -144,7 +144,7 @@
         </v-card-header-text>
       </v-card>
     </v-container>
-    <footer class="text-center text-white fixed-bottom mt-4">
+    <footer class="text-center text-white mt-4">
       <div class="text-center p-3" style="background-color: #333333">
         © 2021 Copyright : AGNEZ Sébastien - BACQUET Manon
       </div>
@@ -173,22 +173,33 @@ export default {
   }),
   computed: {
     ...mapGetters([
+      "retardDepart",
+      "retardArrivee",
+      "departLate",
+      "arriveeLate",
+      "trainsPrevus",
+      "retards",
       "gareD",
       "gareA",
       "dateGares",
+      "gareDepDate",
+      "gareArrDate",
       "indicateurs",
       "infos",
       "satisfaction",
       "arrivalCorrespondence",
       "indicateurs",
       "dateCorrespondence",
+      "moyenneLate",
     ]),
   },
   methods: {
-    ...mapActions(["satisfByDate", "correspondingLines", "correspondingDates"]),
+    ...mapActions(["satisfByDate", "correspondingLines", "correspondingDates", "correspondingLates", "moyenneRetard"]),
     doBarChart() {
       const { depart, arrivee } = this;
       this.correspondingDates({ depart, arrivee });
+      this.correspondingLates({ depart, arrivee });
+      this.moyenneRetard();
     },
     doSatisf() {
       const { indicateurSelect, date } = this;
@@ -224,8 +235,13 @@ export default {
       var gareDepart = element.fields.gare_depart;
       var gareArrivee = element.fields.gare_arrivee;
       var dates = element.fields.date;
+      this.retardDepart.push(element.fields.nb_train_depart_retard);
+      this.retardArrivee.push(element.fields.nb_train_retard_arrivee);
+      this.trainsPrevus.push(element.fields.nb_train_prevu);
       this.gareD.push(gareDepart);
       this.gareA.push(gareArrivee);
+      this.gareDepDate.push(gareDepart);
+      this.gareArrDate.push(gareArrivee);
       this.dateGares.push(dates);
     });
     this.$store.dispatch("withoutDoublonDeparts");
@@ -287,4 +303,5 @@ h1 {
 /* .dates {
   visibility: hidden;
 } */
+
 </style>
