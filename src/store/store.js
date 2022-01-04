@@ -141,7 +141,6 @@ const mutations = {
         state.dataPieChart.datasets[0].data.push(state.dataFields[i].prct_cause_prise_en_charge_voyageurs.toFixed(1))
       }
     }
-    console.log(state.dataPieChart.datasets[0].data)
     state.verifCauseBool = 1
   },
   withoutDoublonDeparts(state) {
