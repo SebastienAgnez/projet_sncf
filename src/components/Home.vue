@@ -144,8 +144,6 @@
         </v-card-header-text>
       </v-card>
     </v-container>
-<<<<<<< HEAD
-=======
     <v-container class="Causes_retard">
       <!-- Card Causes retard -->
       <v-card class="pa-3" variant="outlined">
@@ -216,7 +214,6 @@
         </v-card-header-text>
       </v-card>
     </v-container>
->>>>>>> 45affcc25cbb7b52e0e020c497c462c0ea46107d
     <footer class="text-center text-white mt-4">
       <div class="text-center p-3" style="background-color: #333333">
         © 2021 Copyright : AGNEZ Sébastien - BACQUET Manon
@@ -267,42 +264,41 @@ export default {
       "arrivalCorrespondence",
       "indicateurs",
       "dateCorrespondence",
-<<<<<<< HEAD
       "moyenneLate",
     ]),
   },
   methods: {
-    ...mapActions(["satisfByDate", "correspondingLines", "correspondingDates", "correspondingLates", "moyenneRetard"]),
-=======
+    ...mapActions(
+      ["satisfByDate", 
+      "correspondingLines", 
+      "correspondingDates", 
+      "correspondingLates", 
+      "moyenneRetard",
       "gareDepDate",
       "gareArrDate",
       "dataFields",
       "verifCauseBool",
       "dataPieChart",
-    ]),
-  },
-  methods: {
-    ...mapActions([
       "satisfByDate",
       "correspondingLines",
       "correspondingDates",
       "causeRetByGare",
-    ]),
->>>>>>> 45affcc25cbb7b52e0e020c497c462c0ea46107d
-    doBarChart() {
-      const { depart, arrivee } = this;
-      this.correspondingDates({ depart, arrivee });
-      this.correspondingLates({ depart, arrivee });
-      this.moyenneRetard();
-    },
-    doSatisf() {
-      const { indicateurSelect, date } = this;
-      this.satisfByDate({ indicateurSelect, date });
-    },
-    doPieChart() {
-      const { departCause, arriveeCause, dateCause } = this;
-      this.causeRetByGare({ departCause, arriveeCause, dateCause });
-    },
+    ])
+  },
+
+  doBarChart() {
+    const { depart, arrivee } = this;
+    this.correspondingDates({ depart, arrivee });
+    this.correspondingLates({ depart, arrivee });
+    this.moyenneRetard();
+  },
+  doSatisf() {
+    const { indicateurSelect, date } = this;
+    this.satisfByDate({ indicateurSelect, date });
+  },
+  doPieChart() {
+    const { departCause, arriveeCause, dateCause } = this;
+    this.causeRetByGare({ departCause, arriveeCause, dateCause });
   },
   setup() {
     const dataBarChart = {
