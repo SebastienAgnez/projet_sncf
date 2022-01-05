@@ -227,9 +227,7 @@ import axios from "axios";
 import { mapGetters, mapActions } from "vuex";
 import { BarChart, PieChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
-
 Chart.register(...registerables);
-
 export default {
   name: "Home",
   components: {
@@ -250,6 +248,13 @@ export default {
       "gareD",
       "gareA",
       "dateGares",
+      "retardDepart",
+      "retardArrivee",
+      "departLate",
+      "arriveeLate",
+      "trainsPrevus",
+      "retards",
+      "moyenneLate",
       "indicateurs",
       "infos",
       "satisfaction",
@@ -269,11 +274,15 @@ export default {
       "satisfByDate",
       "correspondingLines",
       "correspondingDates",
+      "correspondingLates", 
+      "moyenneRetard",
       "causeRetByGare",
     ]),
     doBarChart() {
       const { depart, arrivee } = this;
       this.correspondingDates({ depart, arrivee });
+      this.correspondingLates({ depart, arrivee });
+      this.moyenneRetard();
     },
     doSatisf() {
       const { indicateurSelect, date } = this;
@@ -298,11 +307,13 @@ export default {
       this.gareDepDate.push(gareDepart);
       this.gareArrDate.push(gareArrivee);
       this.dateGares.push(dates);
+      this.retardDepart.push(element.fields.nb_train_depart_retard);
+      this.retardArrivee.push(element.fields.nb_train_retard_arrivee);
+      this.trainsPrevus.push(element.fields.nb_train_prevu);
       this.dataFields.push(element.fields);
     });
     this.$store.dispatch("withoutDoublonDeparts");
     this.$store.dispatch("withoutDoublonCorrespondence");
-
     //Récupération des données du jeu de données : Baromètre notes d'opinion SNCF
     const responseNotes = await axios.get(
       "https://data.sncf.com/api/records/1.0/search/?dataset=barometre-notes-dopinion-sncf-gmv&q=&rows=5500&sort=column_1&facet=column_1&facet=column_2"
@@ -321,41 +332,33 @@ export default {
 h1 {
   font-family: "Gabi";
 }
-
 .input-group-text {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
   border-right: 0 !important;
 }
-
 .supp-border {
   border-right: 0 !important;
 }
-
 .border-droit {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
-
 .v-container {
   margin-bottom: 10px;
 }
-
 .emoticonsGood {
   font-size: 130px;
   color: green;
 }
-
 .emoticonsNeutral {
   font-size: 130px;
   color: orange;
 }
-
 .emoticonsBad {
   font-size: 130px;
   color: red;
 }
-
 /* .dates {
   visibility: hidden;
 } */
