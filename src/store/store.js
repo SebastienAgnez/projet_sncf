@@ -15,6 +15,7 @@ const state = {
   retards: [],
   infos: [],
   arrivalCorrespondence: [],
+  arrivalCorrespondencePie: [],
   gareD: [],
   gareA: [],
   gareDepDate: [],
@@ -67,7 +68,9 @@ const state = {
     ],
   },
   posDate: [],
-  dataLates: []
+  dataLates: [],
+  seenCauses: false,
+  seenSatisf: false,
 };
 
 const getters = {
@@ -116,6 +119,9 @@ const getters = {
   arrivalCorrespondence: state => {
     return state.arrivalCorrespondence
   },
+  arrivalCorrespondencePie: state => {
+    return state.arrivalCorrespondence
+  },
   dateCorrespondence: state => {
     return state.dateCorrespondence;
   },
@@ -139,12 +145,19 @@ const getters = {
   },
   dataLates: state => {
     return state.dataLates
+  },
+  seenCauses: state => {
+    return state.seenCauses
+  },
+  seenSatisf: state => {
+    return state.seenSatisf
   }
 };
 
 const mutations = {
   //Faire correspondre les gares de départs et d'arrivées
   correspondingLines(state, item) {
+    console.log(item.target.value)
     state.arrivalCorrespondence = [];
     for (let index = 0; index < state.gareDepDate.length; index++) {
       if (state.gareDepDate[index] == item.target.value) {
@@ -229,6 +242,7 @@ const mutations = {
         state.dataBarChart.datasets[0].data.push(data2021[i])
     }
     state.verifBarBool = 1
+    state.seenCauses = true
   },
 
   //Calculer la moyenne des notes des clients selon la date choisie
@@ -261,6 +275,7 @@ const mutations = {
       }
     }
     state.verifCauseBool = 1
+    state.seenSatisf = true;
   },
 
   //Enlever les doublons des gares de depart
