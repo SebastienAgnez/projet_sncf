@@ -49,7 +49,7 @@ const state = {
     ],
   },
   dataBarChart: {
-    labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet"],
+    labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
     datasets: [
       {
         data: [],
@@ -64,7 +64,8 @@ const state = {
         ],
       },
     ],
-  }
+  },
+  posDate: []
 };
 
 const getters = {
@@ -150,15 +151,24 @@ const mutations = {
     var depart = item.depart
     var arrivee = item.arrivee
     const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+    let years = [];
     for (let index = 0; index < state.gareDepDate.length; index++) {
       if (state.gareDepDate[index] == depart && state.gareArrDate[index] == arrivee) {
         var date = new Date(state.dateGares[index]);
+        let year = date.getFullYear();
+        years.push(year);
         let month = months[date.getMonth()]
-        var dateStr = month + " " + date.getFullYear();
+        var dateStr = month + " " + year;
         state.dateCorrespondence.push(dateStr);
       }
     }
     console.log(state.dateCorrespondence);
+    for (let index = 0; index < state.dateCorrespondence.length; index++) {
+      if (years[index] == "2020") {
+        state.posDate.push(index);
+      }
+    }
+    console.log(state.posDate);
   },
 
   //Trier les retards selon le trajet
@@ -181,7 +191,7 @@ const mutations = {
   },
 
   //Moyenne 
-  moyenneRetard(state){
+  moyenneRetard(state) {
     state.moyenneLate = 0;
     for (let index = 0; index < state.departLate.length; index++) {
       state.moyenneLate = (state.departLate[index] + state.arriveeLate[index]) / state.trierTrainsPrevus[index];
@@ -237,7 +247,7 @@ const mutations = {
   //Enlever les doublons des indicateurs
   whithoutDoublonIndicators(state) {
     state.indicateurs = _.uniq(state.indicateurs);
-  }
+  },
 };
 
 const actions = {
@@ -247,10 +257,10 @@ const actions = {
   correspondingDates({ commit }, item) {
     commit('correspondingDates', item)
   },
-  correspondingLates({commit}, item) {
+  correspondingLates({ commit }, item) {
     commit('correspondingLates', item)
   },
-  moyenneRetard({commit}){
+  moyenneRetard({ commit }) {
     commit('moyenneRetard')
   },
   satisfByDate({ commit }, item) {

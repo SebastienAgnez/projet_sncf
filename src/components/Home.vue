@@ -51,7 +51,10 @@
               ></option>
             </select>
           </div>
-          <v-card-actions class="justify-center">
+          <v-card-actions
+            class="justify-center"
+            v-if="arrivee != 'Choisissez votre gare d\'arrivée'"
+          >
             <v-btn
               @click="doBarChart"
               class="mt-4"
@@ -76,75 +79,7 @@
         </v-card-header-text>
       </v-card>
     </v-container>
-    <v-container class="dates">
-      <!-- Card dates -->
-      <v-card class="pa-3" variant="outlined">
-        <v-card-header-text>
-          <v-card-title>Dates</v-card-title>
-        </v-card-header-text>
-        <form method="post">
-          <div class="input-group">
-            <span class="input-group-text">Mois-Années</span>
-            <input
-              type="month"
-              class="form-control supp-border"
-              name="date"
-              v-model="date"
-            />
-            <span class="input-group-text border-droit">Indicateurs</span>
-            <select
-              class="form-select"
-              id="indicateurs"
-              name="indicateurSelect"
-              v-model="indicateurSelect"
-            >
-              <option selected disabled>Choisissez votre indicateur</option>
-              <option
-                v-for="indicateur in indicateurs"
-                v-bind:key="indicateur"
-                v-text="indicateur"
-              ></option>
-            </select>
-          </div>
-          <v-card-actions class="justify-center">
-            <v-btn
-              class="mt-4"
-              variant="outlined"
-              @click="doSatisf"
-              rounded
-              text
-            >
-              Valider
-            </v-btn>
-          </v-card-actions>
-        </form>
-      </v-card>
-    </v-container>
-    <v-container v-if="satisfaction" class="smiley-satisf">
-      <!-- Card notes satisfaction client -->
-      <v-card class="pa-3" variant="outlined">
-        <v-card-header-text>
-          <v-card-title>Satisfaction Client</v-card-title>
-          <span v-if="satisfaction">
-            <div v-if="10 >= this.satisfaction && this.satisfaction > 7">
-              <span class="material-icons emoticonsGood">insert_emoticon</span>
-              <div>{{ satisfaction }} / 10</div>
-            </div>
-            <div v-else-if="7 >= this.satisfaction && this.satisfaction > 4">
-              <span class="material-icons emoticonsNeutral"
-                >sentiment_neutral</span
-              >
-              <div>{{ satisfaction }} / 10</div>
-            </div>
-            <div v-else-if="4 >= this.satisfaction && this.satisfaction >= 0">
-              <span class="material-icons emoticonsBad">mood_bad</span>
-              <div>{{ satisfaction }} / 10</div>
-            </div>
-          </span>
-        </v-card-header-text>
-      </v-card>
-    </v-container>
-    <v-container class="Causes_retard">
+    <v-container class="Causes_retard" v-if="seenCauses">
       <!-- Card Causes retard -->
       <v-card class="pa-3" variant="outlined">
         <v-card-header-text>
@@ -182,14 +117,22 @@
               ></option>
             </select>
             <span class="input-group-text">Mois-Années</span>
-            <input
-              type="month"
-              class="form-control"
-              name="dateCause"
-              v-model="dateCause"
-            />
+            <select class="form-select" name="dateCause" v-model="dateCause">
+              <option selected disabled>Choisissez le mois et l'année</option>
+              <option
+                v-for="dates in dateCorrespondence"
+                v-bind:key="dates"
+                v-text="dates"
+              ></option>
+            </select>
           </div>
-          <v-card-actions class="justify-center">
+          <v-card-actions
+            class="justify-center"
+            v-if="
+              dateCause != 'Choisissez le mois et l\'année' &&
+              arriveeCause != 'Choisissez votre gare d\'arrivée'
+            "
+          >
             <v-btn
               @click="doPieChart"
               class="mt-4"
@@ -203,7 +146,7 @@
         </form>
       </v-card>
     </v-container>
-    <v-container v-if="verifCauseBool" class="piechart-chart">
+    <v-container v-if="verifCauseBool && seenCauses" class="piechart-chart">
       <v-card class="pa-3" variant="outlined">
         <v-card-header-text>
           <v-card-title
@@ -211,6 +154,82 @@
             {{ arriveeCause }} - {{ dateCause }}</v-card-title
           >
           <PieChart :chartData="dataPieChart" />
+        </v-card-header-text>
+      </v-card>
+    </v-container>
+    <v-container class="dates" v-if="seenDates">
+      <!-- Card dates -->
+      <v-card class="pa-3" variant="outlined">
+        <v-card-header-text>
+          <v-card-title>Dates</v-card-title>
+        </v-card-header-text>
+        <form method="post">
+          <div class="input-group">
+            <span class="input-group-text">Mois-Années</span>
+            <select class="form-select" name="date" v-model="date">
+              <option selected disabled>Choisissez le mois et l'année</option>
+              <option
+                v-for="dates in dateCorrespondence"
+                v-bind:key="dates"
+                v-text="dates"
+              ></option>
+            </select>
+            <span class="input-group-text border-droit">Indicateurs</span>
+            <select
+              class="form-select"
+              id="indicateurs"
+              name="indicateurSelect"
+              v-model="indicateurSelect"
+            >
+              <option selected disabled>Choisissez votre indicateur</option>
+              <option
+                v-for="indicateur in indicateurs"
+                v-bind:key="indicateur"
+                v-text="indicateur"
+              ></option>
+            </select>
+          </div>
+          <v-card-actions
+            class="justify-center"
+            v-if="
+              indicateurSelect != 'Choisissez votre indicateur' &&
+              date != 'Choisissez le mois et l\'année'
+            "
+          >
+            <v-btn
+              class="mt-4"
+              variant="outlined"
+              @click="doSatisf"
+              rounded
+              text
+            >
+              Valider
+            </v-btn>
+          </v-card-actions>
+        </form>
+      </v-card>
+    </v-container>
+    <v-container v-if="satisfaction && seenDates" class="smiley-satisf">
+      <!-- Card notes satisfaction client -->
+      <v-card class="pa-3" variant="outlined">
+        <v-card-header-text>
+          <v-card-title>Satisfaction Client</v-card-title>
+          <span v-if="satisfaction">
+            <div v-if="10 >= this.satisfaction && this.satisfaction > 7">
+              <span class="material-icons emoticonsGood">insert_emoticon</span>
+              <div>{{ satisfaction }} / 10</div>
+            </div>
+            <div v-else-if="7 >= this.satisfaction && this.satisfaction > 4">
+              <span class="material-icons emoticonsNeutral"
+                >sentiment_neutral</span
+              >
+              <div>{{ satisfaction }} / 10</div>
+            </div>
+            <div v-else-if="4 >= this.satisfaction && this.satisfaction >= 0">
+              <span class="material-icons emoticonsBad">mood_bad</span>
+              <div>{{ satisfaction }} / 10</div>
+            </div>
+          </span>
         </v-card-header-text>
       </v-card>
     </v-container>
@@ -236,12 +255,14 @@ export default {
   },
   data: () => ({
     indicateurSelect: "Choisissez votre indicateur",
-    date: null,
+    date: "Choisissez le mois et l'année",
     depart: "Choisissez votre gare de départ",
     arrivee: "Choisissez votre gare d'arrivée",
     departCause: "Choisissez votre gare de départ",
     arriveeCause: "Choisissez votre gare d'arrivée",
-    dateCause: null,
+    dateCause: "Choisissez le mois et l'année",
+    seenCauses: false,
+    seenDates: false,
   }),
   computed: {
     ...mapGetters([
@@ -274,7 +295,7 @@ export default {
       "satisfByDate",
       "correspondingLines",
       "correspondingDates",
-      "correspondingLates", 
+      "correspondingLates",
       "moyenneRetard",
       "causeRetByGare",
     ]),
@@ -283,14 +304,61 @@ export default {
       this.correspondingDates({ depart, arrivee });
       this.correspondingLates({ depart, arrivee });
       this.moyenneRetard();
-    },
-    doSatisf() {
-      const { indicateurSelect, date } = this;
-      this.satisfByDate({ indicateurSelect, date });
+      this.seenCauses = true;
     },
     doPieChart() {
-      const { departCause, arriveeCause, dateCause } = this;
+      var { departCause, arriveeCause, dateCause } = this;
+      dateCause = this.dateEnChiffre(dateCause);
       this.causeRetByGare({ departCause, arriveeCause, dateCause });
+      this.seenDates = true;
+    },
+    doSatisf() {
+      var { indicateurSelect, date } = this;
+      date = this.dateEnChiffre(date);
+      this.satisfByDate({ indicateurSelect, date });
+    },
+    dateEnChiffre(date) {
+      var dateChiffre;
+      date = date.split(" ");
+      switch (date[0]) {
+        case "Janvier":
+          dateChiffre = date[1] + "-01";
+          break;
+        case "Février":
+          dateChiffre = date[1] + "-02";
+          break;
+        case "Mars":
+          dateChiffre = date[1] + "-03";
+          break;
+        case "Avril":
+          dateChiffre = date[1] + "-04";
+          break;
+        case "Mai":
+          dateChiffre = date[1] + "-05";
+          break;
+        case "Juin":
+          dateChiffre = date[1] + "-06";
+          break;
+        case "Juillet":
+          dateChiffre = date[1] + "-07";
+          break;
+        case "Août":
+          dateChiffre = date[1] + "-08";
+          break;
+        case "Septembre":
+          dateChiffre = date[1] + "-09";
+          break;
+        case "Octobre":
+          dateChiffre = date[1] + "-10";
+          break;
+        case "Novembre":
+          dateChiffre = date[1] + "-11";
+          break;
+        case "Décembre":
+          dateChiffre = date[1] + "-12";
+          break;
+      }
+      return dateChiffre;
     },
   },
   async mounted() {
@@ -314,6 +382,7 @@ export default {
     });
     this.$store.dispatch("withoutDoublonDeparts");
     this.$store.dispatch("withoutDoublonCorrespondence");
+
     //Récupération des données du jeu de données : Baromètre notes d'opinion SNCF
     const responseNotes = await axios.get(
       "https://data.sncf.com/api/records/1.0/search/?dataset=barometre-notes-dopinion-sncf-gmv&q=&rows=5500&sort=column_1&facet=column_1&facet=column_2"
