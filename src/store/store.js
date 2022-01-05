@@ -48,6 +48,23 @@ const state = {
       },
     ],
   },
+  dataBarChart: {
+    labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet"],
+    datasets: [
+      {
+        data: [],
+        backgroundColor: [
+          "#77CEFF",
+          "#0079AF",
+          "#123E6B",
+          "#97B0C4",
+          "#A5C8ED",
+          "#77CEFF",
+          "#0079AF",
+        ],
+      },
+    ],
+  }
 };
 
 const getters = {
@@ -105,16 +122,16 @@ const getters = {
   dataFields: state => {
     return state.dataFields
   },
-  pourcCause: state => {
-    return state.pourcCause
-  },
   verifCauseBool: state => {
     return state.verifCauseBool
   },
   dataPieChart: state => {
     return state.dataPieChart
+  },
+  dataBarChart: state => {
+    return state.dataBarChart
   }
-}
+};
 
 const mutations = {
   //Faire correspondre les gares de départs et d'arrivées
@@ -127,12 +144,12 @@ const mutations = {
     }
     state.arrivalCorrespondence = _.uniq(state.arrivalCorrespondence)
   },
+
   //Trier les dates selon le trajet
   correspondingDates(state, item) {
     var depart = item.depart
     var arrivee = item.arrivee
     const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
-    state.dateCorrespondence = [];
     for (let index = 0; index < state.gareDepDate.length; index++) {
       if (state.gareDepDate[index] == depart && state.gareArrDate[index] == arrivee) {
         var date = new Date(state.dateGares[index]);
@@ -187,6 +204,7 @@ const mutations = {
       }
     });
   },
+
   //Ajout des pourcentages de cause des retards
   causeRetByGare(state, item) {
     var depart = item.departCause
@@ -205,16 +223,22 @@ const mutations = {
     }
     state.verifCauseBool = 1
   },
+
+  //Enlever les doublons des gares de depart
   withoutDoublonDeparts(state) {
     state.gareD = _.uniq(state.gareD);
   },
+
+  //Enlever les doublons des gares d'arrivee
   withoutDoublonCorrespondence(state) {
     state.arrivalCorrespondence = _.uniq(state.arrivalCorrespondence);
   },
+
+  //Enlever les doublons des indicateurs
   whithoutDoublonIndicators(state) {
     state.indicateurs = _.uniq(state.indicateurs);
   }
-}
+};
 
 const actions = {
   correspondingLines({ commit }, item) {
@@ -244,7 +268,7 @@ const actions = {
   whithoutDoublonIndicators({ commit }, item) {
     commit('whithoutDoublonIndicators', item)
   }
-}
+};
 
 export const store = createStore({
   state,

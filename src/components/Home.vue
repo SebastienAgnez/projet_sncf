@@ -227,9 +227,7 @@ import axios from "axios";
 import { mapGetters, mapActions } from "vuex";
 import { BarChart, PieChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
-
 Chart.register(...registerables);
-
 export default {
   name: "Home",
   components: {
@@ -247,78 +245,53 @@ export default {
   }),
   computed: {
     ...mapGetters([
+      "gareD",
+      "gareA",
+      "dateGares",
       "retardDepart",
       "retardArrivee",
       "departLate",
       "arriveeLate",
       "trainsPrevus",
       "retards",
-      "gareD",
-      "gareA",
-      "dateGares",
-      "gareDepDate",
-      "gareArrDate",
+      "moyenneLate",
       "indicateurs",
       "infos",
       "satisfaction",
       "arrivalCorrespondence",
       "indicateurs",
       "dateCorrespondence",
-      "moyenneLate",
-    ]),
-  },
-  methods: {
-    ...mapActions(
-      ["satisfByDate", 
-      "correspondingLines", 
-      "correspondingDates", 
-      "correspondingLates", 
-      "moyenneRetard",
       "gareDepDate",
       "gareArrDate",
       "dataFields",
       "verifCauseBool",
       "dataPieChart",
+      "dataBarChart",
+    ]),
+  },
+  methods: {
+    ...mapActions([
       "satisfByDate",
       "correspondingLines",
       "correspondingDates",
+      "correspondingLates", 
+      "moyenneRetard",
       "causeRetByGare",
-    ])
-  },
-
-  doBarChart() {
-    const { depart, arrivee } = this;
-    this.correspondingDates({ depart, arrivee });
-    this.correspondingLates({ depart, arrivee });
-    this.moyenneRetard();
-  },
-  doSatisf() {
-    const { indicateurSelect, date } = this;
-    this.satisfByDate({ indicateurSelect, date });
-  },
-  doPieChart() {
-    const { departCause, arriveeCause, dateCause } = this;
-    this.causeRetByGare({ departCause, arriveeCause, dateCause });
-  },
-  setup() {
-    const dataBarChart = {
-      labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet"],
-      datasets: [
-        {
-          data: [30, 40, 60, 70, 5, 85, 56],
-          backgroundColor: [
-            "#77CEFF",
-            "#0079AF",
-            "#123E6B",
-            "#97B0C4",
-            "#A5C8ED",
-            "#77CEFF",
-            "#0079AF",
-          ],
-        },
-      ],
-    };
-    return { dataBarChart };
+    ]),
+    doBarChart() {
+      const { depart, arrivee } = this;
+      this.correspondingDates({ depart, arrivee });
+      this.correspondingLates({ depart, arrivee });
+      this.moyenneRetard();
+    },
+    doSatisf() {
+      const { indicateurSelect, date } = this;
+      this.satisfByDate({ indicateurSelect, date });
+    },
+    doPieChart() {
+      const { departCause, arriveeCause, dateCause } = this;
+      this.causeRetByGare({ departCause, arriveeCause, dateCause });
+    },
   },
   async mounted() {
     //Récupération des données du jeu de données : régularité mensuelle TGV par liaisons
@@ -329,19 +302,18 @@ export default {
       var gareDepart = element.fields.gare_depart;
       var gareArrivee = element.fields.gare_arrivee;
       var dates = element.fields.date;
-      this.retardDepart.push(element.fields.nb_train_depart_retard);
-      this.retardArrivee.push(element.fields.nb_train_retard_arrivee);
-      this.trainsPrevus.push(element.fields.nb_train_prevu);
       this.gareD.push(gareDepart);
       this.gareA.push(gareArrivee);
       this.gareDepDate.push(gareDepart);
       this.gareArrDate.push(gareArrivee);
       this.dateGares.push(dates);
+      this.retardDepart.push(element.fields.nb_train_depart_retard);
+      this.retardArrivee.push(element.fields.nb_train_retard_arrivee);
+      this.trainsPrevus.push(element.fields.nb_train_prevu);
       this.dataFields.push(element.fields);
     });
     this.$store.dispatch("withoutDoublonDeparts");
     this.$store.dispatch("withoutDoublonCorrespondence");
-
     //Récupération des données du jeu de données : Baromètre notes d'opinion SNCF
     const responseNotes = await axios.get(
       "https://data.sncf.com/api/records/1.0/search/?dataset=barometre-notes-dopinion-sncf-gmv&q=&rows=5500&sort=column_1&facet=column_1&facet=column_2"
@@ -360,43 +332,34 @@ export default {
 h1 {
   font-family: "Gabi";
 }
-
 .input-group-text {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
   border-right: 0 !important;
 }
-
 .supp-border {
   border-right: 0 !important;
 }
-
 .border-droit {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
-
 .v-container {
   margin-bottom: 10px;
 }
-
 .emoticonsGood {
   font-size: 130px;
   color: green;
 }
-
 .emoticonsNeutral {
   font-size: 130px;
   color: orange;
 }
-
 .emoticonsBad {
   font-size: 130px;
   color: red;
 }
-
 /* .dates {
   visibility: hidden;
 } */
-
 </style>
