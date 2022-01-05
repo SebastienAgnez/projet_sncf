@@ -26,6 +26,7 @@ const state = {
   moyenneLate: null,
   dataFields: [],
   verifCauseBool: null,
+  verifBarBool: null,
   dataPieChart: {
     labels: [
       "Causes externes",
@@ -65,7 +66,8 @@ const state = {
       },
     ],
   },
-  posDate: []
+  posDate: [],
+  dataLates: []
 };
 
 const getters = {
@@ -126,11 +128,17 @@ const getters = {
   verifCauseBool: state => {
     return state.verifCauseBool
   },
+  verifBarBool: state => {
+    return state.verifBarBool
+  },
   dataPieChart: state => {
     return state.dataPieChart
   },
   dataBarChart: state => {
     return state.dataBarChart
+  },
+  dataLates: state => {
+    return state.dataLates
   }
 };
 
@@ -152,6 +160,7 @@ const mutations = {
     var arrivee = item.arrivee
     const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
     let years = [];
+    state.dateCorrespondence = []
     for (let index = 0; index < state.gareDepDate.length; index++) {
       if (state.gareDepDate[index] == depart && state.gareArrDate[index] == arrivee) {
         var date = new Date(state.dateGares[index]);
@@ -162,13 +171,12 @@ const mutations = {
         state.dateCorrespondence.push(dateStr);
       }
     }
-    console.log(state.dateCorrespondence);
+    state.posDate = []
     for (let index = 0; index < state.dateCorrespondence.length; index++) {
       if (years[index] == "2020") {
         state.posDate.push(index);
       }
     }
-    console.log(state.posDate);
   },
 
   //Trier les retards selon le trajet
@@ -185,21 +193,42 @@ const mutations = {
         state.trierTrainsPrevus.push(state.trainsPrevus[index]);
       }
     }
-    console.log(state.departLate);
-    console.log(state.arriveeLate);
-    console.log(state.trierTrainsPrevus);
   },
 
   //Moyenne 
-  moyenneRetard(state) {
+  moyenneRetard(state, item) {
     state.moyenneLate = 0;
+    state.dataLates = []
     for (let index = 0; index < state.departLate.length; index++) {
       state.moyenneLate = (state.departLate[index] + state.arriveeLate[index]) / state.trierTrainsPrevus[index];
       if (isNaN(state.moyenneLate)) {
-        state.moyenneLate = 0.0;
+        state.moyenneLate = 0;
+      } else if (state.moyenneLate > 1) {
+        state.moyenneLate = 1;
       }
-      console.log(state.moyenneLate);
+      state.dataLates.push((state.moyenneLate * 100).toFixed(0));
     }
+    state.dataLates = state.dataLates.reverse()
+    state.dataBarChart.datasets[0].data = []
+    var year = item.annee
+    if (year == '2018') {
+      var data2018 = state.dataLates.slice(0, 12)
+      for (var l = 0; l < data2018.length; l++)
+        state.dataBarChart.datasets[0].data.push(data2018[l])
+    } else if (year == '2019') {
+      var data2019 = state.dataLates.slice(12, 24)
+      for (var k = 0; k < data2019.length; k++)
+        state.dataBarChart.datasets[0].data.push(data2019[k])
+    } else if (year == '2020') {
+      var data2020 = state.dataLates.slice(24, 36)
+      for (var j = 0; j < data2020.length; j++)
+        state.dataBarChart.datasets[0].data.push(data2020[j])
+    } else if (year == '2021') {
+      var data2021 = state.dataLates.slice(36, 42)
+      for (var i = 0; i < data2021.length; i++)
+        state.dataBarChart.datasets[0].data.push(data2021[i])
+    }
+    state.verifBarBool = 1
   },
 
   //Calculer la moyenne des notes des clients selon la date choisie
@@ -260,8 +289,8 @@ const actions = {
   correspondingLates({ commit }, item) {
     commit('correspondingLates', item)
   },
-  moyenneRetard({ commit }) {
-    commit('moyenneRetard')
+  moyenneRetard({ commit }, item) {
+    commit('moyenneRetard', item)
   },
   satisfByDate({ commit }, item) {
     commit('satisfByDate', item);

@@ -50,10 +50,21 @@
                 v-text="gare"
               ></option>
             </select>
+            <label class="input-group-text" for="annee">Années</label>
+            <select class="form-select" id="annee" name="annee" v-model="annee">
+              <option selected disabled>Choisissez l'année</option>
+              <option value="2021">2021</option>
+              <option value="2020">2020</option>
+              <option value="2019">2019</option>
+              <option value="2018">2018</option>
+            </select>
           </div>
           <v-card-actions
             class="justify-center"
-            v-if="arrivee != 'Choisissez votre gare d\'arrivée'"
+            v-if="
+              arrivee != 'Choisissez votre gare d\'arrivée' &&
+              annee != 'Choisissez l\'année'
+            "
           >
             <v-btn
               @click="doBarChart"
@@ -68,7 +79,7 @@
         </form>
       </v-card>
     </v-container>
-    <v-container class="bar-chart">
+    <v-container class="bar-chart" v-if="verifBarBool">
       <v-card class="pa-3" variant="outlined">
         <v-card-header-text>
           <v-card-title
@@ -215,11 +226,11 @@
         <v-card-header-text>
           <v-card-title>Satisfaction Client</v-card-title>
           <span v-if="satisfaction">
-            <div v-if="10 >= this.satisfaction && this.satisfaction > 7">
+            <div v-if="10 >= this.satisfaction && this.satisfaction > 6.5">
               <span class="material-icons emoticonsGood">insert_emoticon</span>
               <div>{{ satisfaction }} / 10</div>
             </div>
-            <div v-else-if="7 >= this.satisfaction && this.satisfaction > 4">
+            <div v-else-if="6.5 >= this.satisfaction && this.satisfaction > 4">
               <span class="material-icons emoticonsNeutral"
                 >sentiment_neutral</span
               >
@@ -263,6 +274,7 @@ export default {
     dateCause: "Choisissez le mois et l'année",
     seenCauses: false,
     seenDates: false,
+    annee: "Choisissez l'année",
   }),
   computed: {
     ...mapGetters([
@@ -288,6 +300,8 @@ export default {
       "verifCauseBool",
       "dataPieChart",
       "dataBarChart",
+      "dataLates",
+      "verifBarBool",
     ]),
   },
   methods: {
@@ -300,10 +314,10 @@ export default {
       "causeRetByGare",
     ]),
     doBarChart() {
-      const { depart, arrivee } = this;
+      const { depart, arrivee, annee } = this;
       this.correspondingDates({ depart, arrivee });
       this.correspondingLates({ depart, arrivee });
-      this.moyenneRetard();
+      this.moyenneRetard({ annee });
       this.seenCauses = true;
     },
     doPieChart() {
