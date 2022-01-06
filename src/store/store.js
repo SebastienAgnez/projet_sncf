@@ -41,11 +41,12 @@ const state = {
       {
         data: [],
         backgroundColor: [
-          "#77CEFF",
-          "#0079AF",
-          "#123E6B",
-          "#97B0C4",
-          "#A5C8ED",
+          "#f6d4c9",
+          "#f0b8a5",
+          "#e78d6f",
+          "#e1714c",
+          "#b45a3c",
+          "#703826"
         ],
       },
     ],
@@ -54,15 +55,14 @@ const state = {
     labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
     datasets: [
       {
+        label: "",
         data: [],
         backgroundColor: [
-          "#77CEFF",
-          "#0079AF",
-          "#123E6B",
-          "#97B0C4",
-          "#A5C8ED",
-          "#77CEFF",
-          "#0079AF",
+          "#a5ddf0",
+          "#6fc9e7",
+          "#4cbce1",
+          "#35839d",
+          "#1e4b5a",
         ],
       },
     ],
