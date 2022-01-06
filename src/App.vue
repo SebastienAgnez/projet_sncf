@@ -1,6 +1,6 @@
 <template>
   <v-container class="titre">
-  <h1>SATISF'RETARD</h1>
+    <h1>SATISF'RETARD</h1>
   </v-container>
   <v-container class="container infos">
     <v-card class="texte mx-auto pa-4">
@@ -109,7 +109,6 @@ export default {
 h1 {
   font-family: "Gabi";
   color: #e1714c;
-  font-size: 60px !important;
 }
 
 .infos{
