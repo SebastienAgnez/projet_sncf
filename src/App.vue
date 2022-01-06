@@ -1,8 +1,9 @@
 <template>
+  <v-container class="titre">
   <h1>SATISF'RETARD</h1>
+  </v-container>
   <v-container class="container">
-    <v-col>
-      <v-card class="mx-auto pa-4" max-width="900px">
+      <v-card class="mx-auto pa-4">
         <v-card-header-text>
           Vous en avez marre des retards des trains ? Vous n'êtes pas satisfait
           de ces retards ? Votre coeur balance entre deux trajets ? Alors
@@ -10,13 +11,12 @@
           oui ou non les clients en sont satisfait !
         </v-card-header-text>
       </v-card>
-    </v-col>
   </v-container>
   <BarChart />
   <PieChart />
   <SatisfactionClients />
-  <footer class="text-center text-white mt-4">
-    <div class="text-center p-3" style="background-color: #333333">
+  <footer class="text-center">
+    <div class="copyright text-center">
       © 2021 Copyright : AGNEZ Sébastien - BACQUET Manon
     </div>
   </footer>
@@ -92,9 +92,21 @@ export default {
   font-family: "Gabi";
   src: url("fonts/gabriel_weiss_friends/GABRWFFR.TTF");
 }
+.v-container{
+  max-width: 100%;
+}
+
+.titre{
+  background-image: url("assets/images/background.png");
+  background-size: cover;
+  padding-top: 120px;
+  padding-bottom: 100px;
+}
 
 h1 {
   font-family: "Gabi";
+  color: #EDE000;
+  font-size: 60px !important;
 }
 
 #app {
@@ -103,7 +115,19 @@ h1 {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
-  /* background-image: url("assets/images/background-sncf.jpg"); */
 }
+
+footer{
+  font-family: "Gabi";
+  background-image: url("assets/images/footer.png");
+  background-size: cover;
+  color: #EDE000;
+  margin-top: 80px;
+}
+
+.copyright{
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
 </style>
