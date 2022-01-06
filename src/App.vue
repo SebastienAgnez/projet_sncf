@@ -101,8 +101,7 @@ export default {
 }
 
 .titre{
-  padding-top: 100px;
-  padding-bottom: 50px;
+  padding-top: 50px;
   max-width: 100%;
 }
 
@@ -113,7 +112,7 @@ h1 {
 
 .infos{
   font-family: "InFormal Style";
-  margin-top: 100px;
+  margin-top: 50px;
   margin-bottom: 100px;
   max-width: 90% !important;
 }
@@ -142,6 +141,7 @@ footer{
   background-color: rgb(0, 0, 0, 0.3);
   background-size: cover;
   color: #f6d4c9;
+  margin-top: 50px;
 }
 
 .copyright{
