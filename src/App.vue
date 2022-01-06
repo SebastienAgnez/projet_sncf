@@ -2,15 +2,17 @@
   <v-container class="titre">
   <h1>SATISF'RETARD</h1>
   </v-container>
-  <v-container class="container">
-      <v-card class="mx-auto pa-4">
-        <v-card-header-text>
-          Vous en avez marre des retards des trains ? Vous n'êtes pas satisfait
-          de ces retards ? Votre coeur balance entre deux trajets ? Alors
-          consultez notre site pour choisir votre meilleur trajet et savoir si
-          oui ou non les clients en sont satisfait !
-        </v-card-header-text>
-      </v-card>
+  <v-container class="container infos">
+    <v-card class="texte mx-auto pa-4">
+      <v-card-header-text>
+        Vous souhaitez faire un <b>court</b> voyage ? Le temps d'un week-end ? Vous ne voulez pas trop <b>attendre</b> votre train en <b>retard</b>...
+        <br>
+        <b class="logo">Satisf'retard</b> permet de consulter les <b>retards</b> des trains sur un trajet choisi et de connaître les <b>causes</b> des retards de votre trajet 
+        selon le mois choisi. 
+        <br>
+        Notre petit plus nous vous permettons de connaître la <b>satisfaction</b> des clients...
+      </v-card-header-text>
+    </v-card>
   </v-container>
   <BarChart />
   <PieChart />
@@ -92,21 +94,38 @@ export default {
   font-family: "Gabi";
   src: url("fonts/gabriel_weiss_friends/GABRWFFR.TTF");
 }
-.v-container{
-  max-width: 100%;
+
+@font-face {
+  font-family: "InFormal Style";
+  src: url("fonts/informal_style/InFormal_Style_Regular.otf");
 }
 
 .titre{
-  background-image: url("assets/images/background.png");
-  background-size: cover;
-  padding-top: 120px;
-  padding-bottom: 100px;
+  padding-top: 100px;
+  padding-bottom: 50px;
+  max-width: 100%;
 }
 
 h1 {
   font-family: "Gabi";
-  color: #EDE000;
+  color: #e1714c;
   font-size: 60px !important;
+}
+
+.infos{
+  font-family: "InFormal Style";
+  margin-top: 100px;
+  margin-bottom: 100px;
+  max-width: 90% !important;
+}
+
+.texte{
+  background-color: rgb(45,22,15, 0.4);
+  border: 3px solid rgb(45,22,15);
+  box-shadow: 5px 5px 8px rgb(45,22,15);
+  border-radius: 10px;
+  font-size: 20px;
+  color: white;
 }
 
 #app {
@@ -115,14 +134,15 @@ h1 {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background-image: url("assets/images/background-title.png");
+  background-size: cover;
 }
 
 footer{
   font-family: "Gabi";
-  background-image: url("assets/images/footer.png");
+  background-color: rgb(0, 0, 0, 0.3);
   background-size: cover;
-  color: #EDE000;
-  margin-top: 80px;
+  color: #f6d4c9;
 }
 
 .copyright{

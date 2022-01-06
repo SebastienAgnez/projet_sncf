@@ -2,9 +2,9 @@
   <div class="BarChart">
     <v-container>
       <!-- Card gares départ/arrivée -->
-      <v-card class="pa-3" variant="outlined">
+      <v-card class="pa-3 chart" variant="outlined">
         <v-card-header>
-          <v-card-title>Ligne directe</v-card-title>
+          <v-card-title class="titre-choix">Retard d'un trajet TGV en ligne directe</v-card-title>
         </v-card-header>
         <form method="post">
           <div class="input-group mb-3">
@@ -67,10 +67,10 @@
       </v-card>
     </v-container>
     <v-container class="bar-chart" v-if="verifBarBool">
-      <v-card class="pa-3" variant="outlined">
+      <v-card class="chart pa-3" variant="outlined">
         <v-card-header-text>
-          <v-card-title
-            >Retard des trains pour le trajet : {{ depart }} -
+          <v-card-title class="titre-chart"
+            >Nombre de trains en retard (en %) pour le trajet : {{ depart }} -
             {{ arrivee }}</v-card-title
           >
           <BarChart :chartData="dataBarChart" />
@@ -131,4 +131,46 @@ export default {
 </script>
 
 <style>
+
+.chart{
+  background-color: rgb(0,0,0,0.6);
+  border: 1px solib black;
+  border-radius: 6px;
+  box-shadow: 4px 4px 3px;
+}
+
+.titre-choix{
+  font-family: "Gabi";
+  font-size: 30px;
+  color: #f9e2db;
+  margin-bottom: 10px;
+}
+
+label{
+  font-family: "InFormal Style";
+  background-color: #ea9b81 !important;
+}
+
+select{
+  background-color: #f0b8a5 !important;
+  font-family: "InFormal Style" !important;
+}
+
+button{
+  background-color: #e78d6f !important;
+  font-family: "Gabi" !important;
+  color: #f9e2db !important;
+}
+
+.titre-chart{
+  font-family: "InFormal Style";
+  color: #f9e2db;
+}
+
+canvas{
+  background-color: rgb(246,212,201,1);
+  border: 1px solid rgb(246,212,201,1);
+  border-radius: 10px;
+}
+
 </style>

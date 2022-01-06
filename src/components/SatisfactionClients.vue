@@ -2,13 +2,13 @@
   <div class="SatisfactionClients">
     <v-container class="Satisfaction" v-if="seenSatisf">
       <!-- Card Satisfaction -->
-      <v-card class="pa-3" variant="outlined">
+      <v-card class="pa-3 chart" variant="outlined">
         <v-card-header-text>
-          <v-card-title>Satisfaction</v-card-title>
+          <v-card-title class="titre-choix">Satisfaction</v-card-title>
         </v-card-header-text>
         <form method="post">
           <div class="input-group">
-            <span class="input-group-text">Mois-Années</span>
+            <span class="input-group-text choix-mois">Mois-Années</span>
             <select class="form-select" name="date" v-model="date">
               <option selected disabled>Choisissez le mois et l'année</option>
               <option
@@ -17,7 +17,7 @@
                 v-text="dates"
               ></option>
             </select>
-            <span class="input-group-text border-droit">Indicateurs</span>
+            <span class="input-group-text border-droit choix-mois">Indicateurs</span>
             <select
               class="form-select"
               id="indicateurs"
@@ -54,23 +54,23 @@
     </v-container>
     <v-container v-if="satisfaction" class="smiley-satisf">
       <!-- Card notes satisfaction client -->
-      <v-card class="pa-3" variant="outlined">
+      <v-card class="pa-3 chart" variant="outlined">
         <v-card-header-text>
-          <v-card-title>Satisfaction Client</v-card-title>
+          <v-card-title class="titre-chart">Satisfaction Client</v-card-title>
           <span v-if="satisfaction">
-            <div v-if="10 >= this.satisfaction && this.satisfaction > 6.5">
+            <div class="fond-satisf" v-if="10 >= this.satisfaction && this.satisfaction > 6.5">
               <span class="material-icons emoticonsGood">insert_emoticon</span>
-              <div>{{ satisfaction }} / 10</div>
+              <div class="note">{{ satisfaction }} / 10</div>
             </div>
-            <div v-else-if="6.5 >= this.satisfaction && this.satisfaction > 4">
+            <div class="fond-satisf" v-else-if="6.5 >= this.satisfaction && this.satisfaction > 4">
               <span class="material-icons emoticonsNeutral"
                 >sentiment_neutral</span
               >
-              <div>{{ satisfaction }} / 10</div>
+              <div class="note">{{ satisfaction }} / 10</div>
             </div>
-            <div v-else-if="4 >= this.satisfaction && this.satisfaction >= 0">
+            <div class="fond-satisf" v-else-if="4 >= this.satisfaction && this.satisfaction >= 0">
               <span class="material-icons emoticonsBad">mood_bad</span>
-              <div>{{ satisfaction }} / 10</div>
+              <div class="note">{{ satisfaction }} / 10</div>
             </div>
           </span>
         </v-card-header-text>
@@ -179,4 +179,16 @@ export default {
   font-size: 130px;
   color: red;
 }
+
+.fond-satisf{
+  background-color: rgb(246,212,201,1);
+  border: 1px solid rgb(246,212,201,1);
+  border-radius: 10px;
+}
+
+.note{
+  font-family: "Gabi" !important;
+  font-size: 20px;
+}
+
 </style>

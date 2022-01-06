@@ -2,9 +2,9 @@
   <div class="PieChart">
     <v-container class="Causes_retard" v-if="seenCauses">
       <!-- Card Causes retard -->
-      <v-card class="pa-3" variant="outlined">
+      <v-card class="pa-3 chart" variant="outlined">
         <v-card-header-text>
-          <v-card-title>Causes des retards</v-card-title>
+          <v-card-title class="titre-choix">Causes des retards</v-card-title>
         </v-card-header-text>
         <form method="post">
           <div class="input-group mb-3">
@@ -37,7 +37,7 @@
                 v-text="gare"
               ></option>
             </select>
-            <span class="input-group-text">Mois-Années</span>
+            <span class="choix-mois input-group-text">Mois-Années</span>
             <select class="form-select" name="dateCause" v-model="dateCause">
               <option selected disabled>Choisissez le mois et l'année</option>
               <option
@@ -68,9 +68,9 @@
       </v-card>
     </v-container>
     <v-container v-if="verifCauseBool" class="piechart-chart">
-      <v-card class="pa-3" variant="outlined">
+      <v-card class="pa-3 chart" variant="outlined">
         <v-card-header-text>
-          <v-card-title
+          <v-card-title class="titre-chart"
             >Pourcentage des causes de retard : {{ departCause }} -
             {{ arriveeCause }} - {{ dateCause }}</v-card-title
           >
@@ -164,4 +164,10 @@ export default {
 </script>
 
 <style>
+
+.choix-mois{
+  font-family: "InFormal Style";
+  background-color: #ea9b81 !important;
+}
+
 </style>

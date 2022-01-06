@@ -34,13 +34,12 @@ const state = {
       {
         data: [],
         backgroundColor: [
-          "#77CEFF",
-          "#0079AF",
-          "#123E6B",
-          "#97B0C4",
-          "#A5C8ED",
-          "#77CEFF",
-          "#0079AF",
+          "#f6d4c9",
+          "#f0b8a5",
+          "#e78d6f",
+          "#e1714c",
+          "#b45a3c",
+          "#703826"
         ],
       },
     ],
@@ -56,13 +55,14 @@ const state = {
     ],
     datasets: [
       {
+        label: "",
         data: [],
         backgroundColor: [
-          "#661F25",
-          "#FF808A",
-          "#B24750",
-          "#146628",
-          "#4FB366",
+          "#a5ddf0",
+          "#6fc9e7",
+          "#4cbce1",
+          "#35839d",
+          "#1e4b5a",
         ],
       },
     ],
