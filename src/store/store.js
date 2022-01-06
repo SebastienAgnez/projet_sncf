@@ -34,8 +34,8 @@ const state = {
       {
         data: [],
         backgroundColor: [
-          "#f6d4c9",
-          "#f0b8a5",
+          "#f3c6b7",
+          "#eda993",
           "#e78d6f",
           "#e1714c",
           "#b45a3c",
