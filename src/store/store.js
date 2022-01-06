@@ -28,28 +28,6 @@ const state = {
   dataFields: [],
   verifCauseBool: null,
   verifBarBool: null,
-  dataPieChart: {
-    labels: [
-      "Causes externes",
-      "Cause gestion gare",
-      "Cause gestion trafic",
-      "Causes infrastructures",
-      "Cause matériel roulant",
-      "Cause prise en charge voyageurs",
-    ],
-    datasets: [
-      {
-        data: [],
-        backgroundColor: [
-          "#77CEFF",
-          "#0079AF",
-          "#123E6B",
-          "#97B0C4",
-          "#A5C8ED",
-        ],
-      },
-    ],
-  },
   dataBarChart: {
     labels: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
     datasets: [
@@ -63,6 +41,28 @@ const state = {
           "#A5C8ED",
           "#77CEFF",
           "#0079AF",
+        ],
+      },
+    ],
+  },
+  dataPieChart: {
+    labels: [
+      "Causes externes",
+      "Cause gestion gare",
+      "Cause gestion trafic",
+      "Causes infrastructures",
+      "Cause matériel roulant",
+      "Cause prise en charge voyageurs",
+    ],
+    datasets: [
+      {
+        data: [],
+        backgroundColor: [
+          "#661F25",
+          "#FF808A",
+          "#B24750",
+          "#146628",
+          "#4FB366",
         ],
       },
     ],
@@ -157,7 +157,6 @@ const getters = {
 const mutations = {
   //Faire correspondre les gares de départs et d'arrivées
   correspondingLines(state, item) {
-    console.log(item.target.value)
     state.arrivalCorrespondence = [];
     for (let index = 0; index < state.gareDepDate.length; index++) {
       if (state.gareDepDate[index] == item.target.value) {
